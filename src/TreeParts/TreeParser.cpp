@@ -2,8 +2,10 @@
 
 #include <iostream>
 
-#include "TrunkNode.h"
-#include "BranchNode.h"
+#include "src/TreeParts/ConcreteNodes/TrunkNode.h"
+#include "src/TreeParts/ConcreteNodes/BranchNode.h"
+#include "src/TreeParts/ConcreteNodes/ResourceNode.h"
+#include "src/TreeParts/ConcreteNodes/NestNode.h"
 
 
 TreeParser::~TreeParser() {
@@ -18,6 +20,7 @@ TreeParser& TreeParser::parse_tree(const std::vector<std::string>& tree_text_rep
 }
 
 TreeParser& TreeParser::feed_string(const std::string& node_string) {
+    // TODO: Refactor?
     if (node_string.empty())
         return *this;  // skip empty lines
     if (expect_descent_) {
@@ -38,10 +41,25 @@ TreeParser& TreeParser::feed_string(const std::string& node_string) {
             throw std::runtime_error(format_exception(
                     "Can not go up on root node; did you mean finish()?", node_string));
     }
-    if (match_and_add_trunk_node(node_string))
-        return *this;
-    if (match_and_add_branch_node(node_string))
-        return *this;
+    TreeNode* parent = nodes_.empty() ? nullptr : nodes_.back();
+
+    static const auto node_creator_fn = {
+            &TreeParser::maybe_create_trunk_node,
+            &TreeParser::maybe_create_branch_node,
+            &TreeParser::maybe_create_resource_node,
+            &TreeParser::maybe_create_nest_node
+    };
+    for (const auto& fn : node_creator_fn) {
+        if (auto child = std::invoke(fn, this, parent, node_string)) {
+            if (parent) {
+                parent->addChild(child);
+            } else {
+                nodes_.push_back(child);
+                expect_descent_ = true;
+            }
+            return *this;
+        }
+    }
 
     if (node_string == ">") {
         if (!nodes_.back()->childCount())
@@ -65,49 +83,57 @@ TreeNode* TreeParser::finish() {
     return tmp;
 }
 
-bool TreeParser::match_and_add_trunk_node(const std::string& node_string) {
+TreeNode* TreeParser::maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const {
     static const std::regex trunk_regex_("trunk ([a-zA-Z0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, trunk_regex_)) {
+        if (dynamic_cast<const BranchNode*>(parent))
+            throw std::runtime_error(format_exception("Can not grow trunk on a branch", node_string));
         std::string name = matches[1].str();
-        auto* child = new TrunkNode(nodes_.empty() ? nullptr : nodes_.back(),
-                                    QString::fromStdString(name));
-        if (!nodes_.empty()) {
-            // child not leaking - deleted in parent's dtor
-            bool last_node_is_branch = dynamic_cast<BranchNode*>(nodes_.back());
-            if (last_node_is_branch)
-                throw std::runtime_error(format_exception("Can not grow trunk on a branch", node_string));
-            nodes_.back()->addChild(child);
-        } else {
-            nodes_.push_back(child);
-            expect_descent_ = true;
-        }
-        return true;
+        return new TrunkNode(parent, QString::fromStdString(name));
     }
-    return false;
+    return nullptr;
 }
 
-bool TreeParser::match_and_add_branch_node(const std::string& node_string) {
+TreeNode* TreeParser::maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const {
     static const std::regex branch_regex_("branch ([a-zA-Z0-9]+) ([0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, branch_regex_)) {
         std::string name = matches[1].str();
         int capacity = atoi(matches[2].str().c_str());
-        auto* child = new BranchNode(nodes_.empty() ? nullptr : nodes_.back(),
-                                     QString::fromStdString(name), capacity);
-        if (!nodes_.empty()) {
-            nodes_.back()->addChild(child);
-        } else {
-            nodes_.push_back(child);
-            expect_descent_ = true;
-        }
-        return true;
+        return new BranchNode(parent, QString::fromStdString(name), capacity);
     }
-    return false;
+    return nullptr;
 }
 
-std::string TreeParser::format_exception(
-        const char* message, const std::string& node_string) const {
+TreeNode* TreeParser::maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const {
+    static const std::regex branch_regex_("branch (leaf|acorn) ([0-9]+)");
+    std::smatch matches;
+    if (std::regex_match(node_string, matches, branch_regex_)) {
+        if (parent != nullptr && !dynamic_cast<const BranchNode*>(parent))
+            throw std::runtime_error(format_exception("Can only grow resource on a branch", node_string));
+        std::string resource_strrepr = matches[1].str();
+        auto rt = get_typerepr(resource_strrepr.c_str());
+        unsigned int amount = atoi(matches[2].str().c_str());
+        return new ResourceNode(parent, rt, amount);
+    }
+    return nullptr;
+}
+
+TreeNode* TreeParser::maybe_create_nest_node(TreeNode* parent, const std::string& node_string) const {
+    static const std::regex branch_regex_("nest ([a-zA-Z0-9]+) ([0-9]+)");
+    std::smatch matches;
+    if (std::regex_match(node_string, matches, branch_regex_)) {
+        if (parent != nullptr && !dynamic_cast<const BranchNode*>(parent))
+            throw std::runtime_error(format_exception("Can only place a nest on a branch", node_string));
+        std::string name = matches[1].str();
+        int level = atoi(matches[2].str().c_str());
+        return new NestNode(parent, QString::fromStdString(name), level);
+    }
+    return nullptr;
+}
+
+std::string TreeParser::format_exception(const char* message, const std::string& node_string) const {
     std::stringstream ss;
     ss << message << ": line " << line_no << " - " << node_string;
     return ss.str();

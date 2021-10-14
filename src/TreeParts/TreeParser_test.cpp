@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "TreeParser.h"
-#include "TreeNode.h"
+#include "src/TreeParts/Interfaces/TreeNode.h"
 
 using namespace testing;
 
@@ -222,12 +222,52 @@ TEST(TreeParserTest, BranchRootIsAllowed) {
 }
 
 
-TEST(TreeParserTest, GrowingTrunkFromBranchesIsNotAllowed) {
+TEST(TreeParserTest, GrowingTrunkFromBranchesThrows) {
     std::vector<std::string> tree_text_repr = {
             "branch t1 1",
             ">",
             "branch t1 2",
             "trunk t11"
+    };
+    ASSERT_THROW(TreeParser().parse_tree(tree_text_repr), std::runtime_error);
+}
+
+
+TEST(TreeParserTest, GoingDownOnNestThrows) {
+    std::vector<std::string> tree_text_repr = {
+            "nest n1 1",
+            ">",
+            "nest n2 1"
+    };
+    ASSERT_THROW(TreeParser().parse_tree(tree_text_repr), std::runtime_error);
+}
+
+
+TEST(TreeParserTest, GoingDownOnResourceThrows) {
+    std::vector<std::string> tree_text_repr = {
+            "resource leaf 1",
+            ">",
+            "resource acorn 1"
+    };
+    ASSERT_THROW(TreeParser().parse_tree(tree_text_repr), std::runtime_error);
+}
+
+
+TEST(TreeParserTest, PlacingNestOnTrunkThrows) {
+    std::vector<std::string> tree_text_repr = {
+            "trunk t1",
+            ">",
+            "nest n2 1"
+    };
+    ASSERT_THROW(TreeParser().parse_tree(tree_text_repr), std::runtime_error);
+}
+
+
+TEST(TreeParserTest, PlacingResourceOnTrunkThrows) {
+    std::vector<std::string> tree_text_repr = {
+            "trunk t1",
+            ">",
+            "resource acorn 1"
     };
     ASSERT_THROW(TreeParser().parse_tree(tree_text_repr), std::runtime_error);
 }

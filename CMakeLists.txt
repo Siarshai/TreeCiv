@@ -18,12 +18,16 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Quick REQUIRED)
 
 set(TREE_ITEMS
-        src/TreeParts/TreeNode.cpp
-        src/TreeParts/TreeNode.h
-        src/TreeParts/TrunkNode.cpp
-        src/TreeParts/TrunkNode.h
-        src/TreeParts/BranchNode.cpp
-        src/TreeParts/BranchNode.h
+        src/TreeParts/Interfaces/TreeNode.cpp
+        src/TreeParts/Interfaces/TreeNode.h
+        src/TreeParts/ConcreteNodes/TrunkNode.cpp
+        src/TreeParts/ConcreteNodes/TrunkNode.h
+        src/TreeParts/ConcreteNodes/BranchNode.cpp
+        src/TreeParts/ConcreteNodes/BranchNode.h
+        src/TreeParts/ConcreteNodes/ResourceNode.cpp
+        src/TreeParts/ConcreteNodes/ResourceNode.h
+        src/TreeParts/ConcreteNodes/NestNode.cpp
+        src/TreeParts/ConcreteNodes/NestNode.h
         src/TreeParts/TreeParser.cpp
         src/TreeParts/TreeParser.h)
 

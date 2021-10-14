@@ -1,17 +1,18 @@
 #ifndef TREE_CIVILIZATION_BRANCHNODE_H
 #define TREE_CIVILIZATION_BRANCHNODE_H
 
-#include "TreeNode.h"
+#include "src/TreeParts/Interfaces/TreeNode.h"
+
 
 class BranchNode : public TreeNode {
 public:
-    BranchNode(TreeNode* parent, QVariant name, int capacity);
+    BranchNode(TreeNode* parent, const QString& name, int capacity);
 
     [[nodiscard]] int columnCount() const override;
     [[nodiscard]] QVariant data(int column) const override;
 
 private:
-    QVariant name_;
+    QString name_;
     const int capacity_;
 };
 

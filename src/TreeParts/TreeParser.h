@@ -16,8 +16,10 @@ public:
     TreeNode* finish();
 
 private:
-    [[nodiscard]] bool match_and_add_trunk_node(const std::string& node_string);
-    [[nodiscard]] bool match_and_add_branch_node(const std::string& node_string);
+    [[nodiscard]] TreeNode* maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] TreeNode* maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] TreeNode* maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] TreeNode* maybe_create_nest_node(TreeNode* parent, const std::string& node_string) const;
     std::string format_exception(const char* message, const std::string& node_string) const;
 
     std::deque<TreeNode*> nodes_;

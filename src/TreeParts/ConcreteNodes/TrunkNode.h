@@ -1,17 +1,17 @@
 #ifndef TREE_CIVILIZATION_TRUNKNODE_H
 #define TREE_CIVILIZATION_TRUNKNODE_H
 
-#include "TreeNode.h"
+#include "src/TreeParts/Interfaces/TreeNode.h"
 
 class TrunkNode : public TreeNode {
 public:
-    explicit TrunkNode(TreeNode* parent, QVariant name);
+    TrunkNode(TreeNode* parent, const QString& name);
 
     [[nodiscard]] int columnCount() const override;
     [[nodiscard]] QVariant data(int column) const override;
 
 private:
-    QVariant name_;
+    QString name_;
 };
 
 

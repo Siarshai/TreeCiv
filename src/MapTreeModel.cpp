@@ -1,6 +1,6 @@
 #include "MapTreeModel.h"
-#include "src/TreeParts/TrunkNode.h"
-#include "src/TreeParts/BranchNode.h"
+#include "src/TreeParts/ConcreteNodes/TrunkNode.h"
+#include "src/TreeParts/ConcreteNodes/BranchNode.h"
 
 
 MapTreeModel::MapTreeModel(TreeNode* tree_root, QObject* parent)
