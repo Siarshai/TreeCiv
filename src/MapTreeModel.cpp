@@ -1,6 +1,5 @@
 #include "MapTreeModel.h"
-#include "src/TreeParts/ConcreteNodes/TrunkNode.h"
-#include "src/TreeParts/ConcreteNodes/BranchNode.h"
+#include "src/TreeParts/Interfaces/TreeNode.h"
 
 
 MapTreeModel::MapTreeModel(TreeNode* tree_root, QObject* parent)
@@ -16,11 +15,14 @@ QVariant MapTreeModel::data(const QModelIndex& index, int role) const {
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
-        return QVariant();
-
     TreeNode *item = getItem(index);
-    return item->data(index.column());
+    if (role == Qt::DisplayRole) {
+        return item->data(0);
+    } else if (role == TreeRoles::LevelRole) {
+        return item->data(1);  // TODO: wtf? Why not index.column()
+    }
+    return QVariant();
+
 }
 
 QVariant MapTreeModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -59,7 +61,7 @@ int MapTreeModel::rowCount(const QModelIndex& parent) const {
 }
 
 int MapTreeModel::columnCount(const QModelIndex& parent) const {
-    return rootItem->columnCount();
+    return 2; // rootItem->columnCount();
 }
 
 Qt::ItemFlags MapTreeModel::flags(const QModelIndex& index) const {
@@ -101,5 +103,8 @@ TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {
 }
 
 QHash<int, QByteArray> MapTreeModel::roleNames() const {
-    return QAbstractItemModel::roleNames();
+    QHash<int, QByteArray> roles;
+    roles[DisplayRole] = "display";
+    roles[LevelRole] = "level";
+    return roles;
 }

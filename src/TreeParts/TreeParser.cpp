@@ -21,6 +21,7 @@ TreeParser& TreeParser::parse_tree(const std::vector<std::string>& tree_text_rep
 
 TreeParser& TreeParser::feed_string(const std::string& node_string) {
     // TODO: Refactor?
+    ++line_no;
     if (node_string.empty())
         return *this;  // skip empty lines
     if (expect_descent_) {
@@ -107,7 +108,7 @@ TreeNode* TreeParser::maybe_create_branch_node(TreeNode* parent, const std::stri
 }
 
 TreeNode* TreeParser::maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const {
-    static const std::regex branch_regex_("branch (leaf|acorn) ([0-9]+)");
+    static const std::regex branch_regex_("resource (leaf|acorn) ([0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, branch_regex_)) {
         if (parent != nullptr && !dynamic_cast<const BranchNode*>(parent))

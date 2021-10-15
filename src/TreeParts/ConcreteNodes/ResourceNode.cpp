@@ -1,8 +1,8 @@
 #include "ResourceNode.h"
 
 
-ResourceNode::ResourceNode(TreeNode* parent, ResourceType resourceType, unsigned int quantity)
-        : TreeNode(parent), resourceType_(resourceType), quantity_(quantity) {}
+ResourceNode::ResourceNode(TreeNode* parent, ResourceType resourceType, unsigned int level)
+        : TreeNode(parent), resourceType_(resourceType), level_(level) {}
 
 int ResourceNode::columnCount() const {
     return 3;
@@ -11,7 +11,7 @@ int ResourceNode::columnCount() const {
 QVariant ResourceNode::data(int column) const {
     if (column == 0)
         return get_strrepr(resourceType_);
-    else if (column == 2)
-        return quantity_;
+    else if (column == 1)
+        return level_;
     return QVariant();
 }

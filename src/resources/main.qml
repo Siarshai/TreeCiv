@@ -62,15 +62,17 @@ ApplicationWindow {
             OldControls.TableViewColumn {
                 role: "display"
                 title: "Name"
-                width: base_window.width*2/3 - 10
+                width: base_window.width*1/2 - 10
                 resizable: false
                 movable: false
             }
-//            TableViewColumn {
-//                title: "Number of cities"
-//                role: "filePermissions"
-//                width: 100
-//            }
+            OldControls.TableViewColumn {
+                role: "level"
+                title: "Level"
+                width: base_window.width*1/6 - 10
+                resizable: false
+                movable: false
+            }
         }
         ListView {
             id: resources_list_view

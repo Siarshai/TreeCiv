@@ -271,3 +271,37 @@ TEST(TreeParserTest, PlacingResourceOnTrunkThrows) {
     };
     ASSERT_THROW(TreeParser().parse_tree(tree_text_repr), std::runtime_error);
 }
+
+
+TEST(TreeParserTest, ChainTest1) {
+    const std::vector<std::string> tree_text_repr = {
+            "trunk MainTrunk",
+            ">",
+            "trunk SouthwardSubtrunk",
+            ">",
+            "branch GrayleafBranch 12",
+            ">",
+            "resource leaf 1",
+            "nest NestName 2",
+            "resource acorn 3",
+            "<",
+            "branch GrayleafBranch 12",
+            ">",
+            "resource leaf 15",
+    };
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    ASSERT_EQ(root_trunk_node->childCount(), 1);
+    TreeNode* subtrunk_node = root_trunk_node->child(0);
+    ASSERT_EQ(subtrunk_node->childCount(), 2);
+    ASSERT_EQ(subtrunk_node->columnCount(), 1);
+    TreeNode* branch_node = subtrunk_node->child(0);
+    ASSERT_EQ(branch_node->childCount(), 3);
+    ASSERT_EQ(branch_node->columnCount(), 1);
+
+    ASSERT_EQ(branch_node->child(0)->data(1).toInt(), 1);
+    ASSERT_EQ(branch_node->child(1)->data(1).toInt(), 2);
+    ASSERT_EQ(branch_node->child(2)->data(1).toInt(), 3);
+}
+
+
+

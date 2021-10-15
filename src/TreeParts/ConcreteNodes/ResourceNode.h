@@ -6,14 +6,14 @@
 
 class ResourceNode : public TreeNode {
 public:
-    ResourceNode(TreeNode* parent, ResourceType resourceType, unsigned int quantity);
+    ResourceNode(TreeNode* parent, ResourceType resourceType, unsigned int level);
 
     [[nodiscard]] int columnCount() const override;
     [[nodiscard]] QVariant data(int column) const override;
 
 private:
     const ResourceType resourceType_;
-    const unsigned int quantity_;
+    const unsigned int level_;
 };
 
 

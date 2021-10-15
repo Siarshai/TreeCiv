@@ -12,6 +12,12 @@ class TreeNode;
 class MapTreeModel : public QAbstractItemModel {
 Q_OBJECT
 public:
+    enum TreeRoles  {
+        DisplayRole = Qt::DisplayRole,
+        LevelRole = Qt::UserRole + 1
+    };
+    Q_ENUM(TreeRoles)
+
     explicit MapTreeModel(TreeNode* tree_root, QObject* parent = nullptr);
     ~MapTreeModel() override;
 
