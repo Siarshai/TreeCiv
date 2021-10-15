@@ -77,7 +77,7 @@ TEST(TreeParserTest, Depth2Test) {
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
         QVariant data = subnode->data(0);
-        ASSERT_EQ(data.toString().toStdString(), children_data[i]);
+        ASSERT_EQ(data.toString().toStdString(), "Trunk - " + children_data[i]);
     }
 }
 
@@ -103,7 +103,7 @@ TEST(TreeParserTest, Depth3Test) {
         TreeNode* subnode = node2->child(i);
         ASSERT_EQ(subnode->columnCount(), 1);
         QVariant data = subnode->data(0);
-        ASSERT_EQ(data.toString().toStdString(), children_data[i]);
+        ASSERT_EQ(data.toString().toStdString(), "Trunk - " + children_data[i]);
     }
 }
 
@@ -129,9 +129,9 @@ TEST(TreeParserTest, AscendTest) {
         ASSERT_EQ(subnode->columnCount(), 1);
         QVariant data = subnode->data(0);
         if (i == 0)
-            ASSERT_EQ(data.toString().toStdString(), "t11");
+            ASSERT_EQ(data.toString().toStdString(), "Trunk - t11");
         else
-            ASSERT_EQ(data.toString().toStdString(), children_data[i - 1]);
+            ASSERT_EQ(data.toString().toStdString(), "Trunk - " + children_data[i - 1]);
     }
 }
 
@@ -151,7 +151,7 @@ TEST(TreeParserTest, BranchNodeTest) {
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
         ASSERT_EQ(subnode->columnCount(), 1);
-        ASSERT_EQ(subnode->data(0).toString().toStdString(), children_data[i].first);
+        ASSERT_EQ(subnode->data(0).toString().toStdString(), "Branch - " + children_data[i].first);
     }
 }
 
@@ -298,6 +298,9 @@ TEST(TreeParserTest, ChainTest1) {
     ASSERT_EQ(branch_node->childCount(), 3);
     ASSERT_EQ(branch_node->columnCount(), 1);
 
+    ASSERT_EQ(branch_node->child(0)->data(0).toString().toStdString(), "Resource - Leaf");
+    ASSERT_EQ(branch_node->child(1)->data(0).toString().toStdString(), "Nest - NestName");
+    ASSERT_EQ(branch_node->child(2)->data(0).toString().toStdString(), "Resource - Acorn");
     ASSERT_EQ(branch_node->child(0)->data(1).toInt(), 1);
     ASSERT_EQ(branch_node->child(1)->data(1).toInt(), 2);
     ASSERT_EQ(branch_node->child(2)->data(1).toInt(), 3);

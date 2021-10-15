@@ -10,7 +10,7 @@ int ResourceNode::columnCount() const {
 
 QVariant ResourceNode::data(int column) const {
     if (column == 0)
-        return get_strrepr(resourceType_);
+        return "Resource - " + QString(get_strrepr(resourceType_));  // TODO: To variable
     else if (column == 1)
         return level_;
     return QVariant();
