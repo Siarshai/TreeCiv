@@ -31,6 +31,10 @@ TreeNode* TreeNode::child(int number) {
     return childItems_.at(number);
 }
 
+const TreeNode* TreeNode::child(int number) const {
+    return childItems_.at(number);
+}
+
 int TreeNode::childCount() const {
     return childItems_.size();
 }

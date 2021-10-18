@@ -16,6 +16,8 @@ public:
     TreeNode* finish();
 
 private:
+    // Could have used here Strategy pattern, but program doesn't seem to benefit from
+    // decoupling here: no dynamically registering Strategies (yet).
     [[nodiscard]] TreeNode* maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const;
     [[nodiscard]] TreeNode* maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const;
     [[nodiscard]] TreeNode* maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const;

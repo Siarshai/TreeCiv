@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_PREFIX_PATH "/home/siarshai/Programming/Qt5.12.11/5.12.11/gcc_64/lib/cmake")
 
-set(PROJECT_NAME tree_civilization)
+set(PROJECT_NAME tree_civilization)  # TODO: redundant
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 17)
@@ -29,7 +29,10 @@ set(TREE_ITEMS
         src/TreeParts/ConcreteNodes/NestNode.cpp
         src/TreeParts/ConcreteNodes/NestNode.h
         src/TreeParts/TreeParser.cpp
-        src/TreeParts/TreeParser.h)
+        src/TreeParts/TreeParser.h
+        src/TreeParts/Interfaces/ITreeGrowthStrategy.h
+        src/TreeParts/TreeGrowthStrategy.h
+        src/TreeParts/TreeGrowthStrategy.cpp)
 
 set(MAIN_SOURCES
         src/main.cpp
@@ -47,6 +50,7 @@ target_link_libraries(${PROJECT_NAME}
 add_executable(${PROJECT_NAME}_test
         src/main_test_all.cpp
         src/TreeParts/TreeParser_test.cpp
+        src/TreeParts/TreeGrowthStrategy_test.cpp
         ${TREE_ITEMS})
 
 target_link_libraries(

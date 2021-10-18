@@ -14,11 +14,14 @@ enum class ResourceType {
 const char* get_strrepr(ResourceType rt);
 ResourceType get_typerepr(const char* strrepr);
 
+
+// TODO: Enhance typing with base template class?
 class TreeNode {
 public:
     explicit TreeNode(TreeNode* parent);
     virtual ~TreeNode();
     [[nodiscard]] TreeNode* child(int number);
+    [[nodiscard]] const TreeNode* child(int number) const;
     [[nodiscard]] int childCount() const;
     [[nodiscard]] TreeNode* parent() const;
     [[nodiscard]] int childNumber() const;

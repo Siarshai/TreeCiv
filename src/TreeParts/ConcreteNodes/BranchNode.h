@@ -10,6 +10,7 @@ public:
 
     [[nodiscard]] int columnCount() const override;
     [[nodiscard]] QVariant data(int column) const override;
+    [[nodiscard]] int get_capacity() const;
 
 private:
     QString name_;
