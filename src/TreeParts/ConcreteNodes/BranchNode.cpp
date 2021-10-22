@@ -12,7 +12,7 @@ int BranchNode::columnCount() const {
 QVariant BranchNode::data(int column) const {
     if (column == 0)
         return "Branch - " + name_;
-    return QVariant();
+    return QVariant("");
 }
 
 int BranchNode::get_capacity() const {

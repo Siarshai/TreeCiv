@@ -12,6 +12,6 @@ QVariant NestNode::data(int column) const {
     if (column == 0)
         return "Nest - " + name_;
     else if (column == 1)
-        return level_;
-    return QVariant();
+        return QString::number(level_);
+    return QVariant("");
 }

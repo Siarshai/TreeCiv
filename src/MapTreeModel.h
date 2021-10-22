@@ -37,7 +37,9 @@ public:
     [[nodiscard]] int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     [[nodiscard]] int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
+    [[nodiscard]] Qt::DropActions supportedDragActions() const override;
     [[nodiscard]] Qt::ItemFlags flags(const QModelIndex &index) const override;
+
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole) override;
     bool setHeaderData(int section, Qt::Orientation orientation,

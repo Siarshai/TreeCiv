@@ -79,10 +79,14 @@ int MapTreeModel::columnCount(const QModelIndex& parent) const {
     return 2; // rootItem->columnCount();
 }
 
+Qt::DropActions MapTreeModel::supportedDragActions() const {
+    return Qt::MoveAction;
+}
+
 Qt::ItemFlags MapTreeModel::flags(const QModelIndex& index) const {
     if (!index.isValid())
         return 0;
-    return QAbstractItemModel::flags(index);
+    return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
 }
 
 bool MapTreeModel::setData(const QModelIndex& index, const QVariant& value, int role) {

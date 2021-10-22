@@ -11,5 +11,5 @@ int TrunkNode::columnCount() const {
 QVariant TrunkNode::data(int column) const {
     if (column == 0)
         return "Trunk - " + name_;
-    return QVariant();
+    return QVariant("");
 }

@@ -73,6 +73,15 @@ ApplicationWindow {
                 resizable: false
                 movable: false
             }
+
+            itemDelegate: Item {
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: styleData.textColor
+                    elide: styleData.elideMode
+                    text: styleData.value
+                }
+            }
         }
         ListView {
             id: resources_list_view

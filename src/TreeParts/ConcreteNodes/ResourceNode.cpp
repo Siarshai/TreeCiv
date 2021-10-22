@@ -12,8 +12,8 @@ QVariant ResourceNode::data(int column) const {
     if (column == 0)
         return "Resource - " + QString(get_strrepr(resourceType_));  // TODO: To variable
     else if (column == 1)
-        return std::floor(amount_);  // TODO: Should i use float number raw?
-    return QVariant();
+        return QString::number(amount_);
+    return QVariant("");
 }
 
 ResourceType ResourceNode::get_resource_type() const {
