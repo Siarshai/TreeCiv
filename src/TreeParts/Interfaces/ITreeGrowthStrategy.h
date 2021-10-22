@@ -3,14 +3,29 @@
 
 #include <set>
 #include <QtCore>
-#include "TreeNode.h"
 
 
-class ITreeGrowthStrategy : public QObject {
+class TreeNode;
+
+
+class IAmountModifyingGrowthStrategy : public QObject {
 Q_OBJECT
 public:
-    virtual ~ITreeGrowthStrategy() = default;
+    virtual ~IAmountModifyingGrowthStrategy() = default;
     virtual std::set<TreeNode*> grow_resources(TreeNode* node) const = 0;
+};
+
+
+
+using before_insert_cb_t = std::function<void(TreeNode* parent)>;
+using after_insert_cb_t = std::function<void()>;
+
+class ITreeModifyingGrowthStrategy : public QObject {
+Q_OBJECT
+public:
+    virtual ~ITreeModifyingGrowthStrategy() = default;
+    virtual void grow_resources(TreeNode* node, before_insert_cb_t before_insert_cb,
+                                after_insert_cb_t after_insert_cb) const = 0;
 };
 
 

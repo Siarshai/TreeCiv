@@ -92,8 +92,9 @@ void ResourceBreedsResourceGrowthStrategy::gather_eligible_branches(
 RandomPoppingResourcesGrowthStrategy::RandomPoppingResourcesGrowthStrategy(int resource_per_tick)
         : resource_per_tick_(resource_per_tick) {}
 
-std::set<TreeNode*> RandomPoppingResourcesGrowthStrategy::grow_resources(TreeNode* node) const {
-    std::set<TreeNode*> nodes_changed;
+void RandomPoppingResourcesGrowthStrategy::grow_resources(
+        TreeNode* node, before_insert_cb_t before_insert_cb,
+        after_insert_cb_t after_insert_cb) const {
     std::set<BranchNode*> branches;
     gather_branches(branches, node);
     if (!branches.empty()) {
@@ -102,11 +103,11 @@ std::set<TreeNode*> RandomPoppingResourcesGrowthStrategy::grow_resources(TreeNod
         auto resource_nodes = get_resource_nodes(branch);
         int resource_amount = max_resource_amount_for_node(branch, resource_nodes, resource_per_tick_);
         if (resource_amount > 0) {
+            before_insert_cb(branch);
             branch->addChild(new ResourceNode(branch, rt, resource_amount));
-            nodes_changed.insert(branch);
+            after_insert_cb();
         }
     }
-    return nodes_changed;
 }
 
 void RandomPoppingResourcesGrowthStrategy::gather_branches(std::set<BranchNode*>& branches, TreeNode* node) {

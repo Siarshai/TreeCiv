@@ -4,13 +4,6 @@
 #include "TreeGrowthStrategy.h"
 
 
-static void repeat_grow_n_times(
-        const std::shared_ptr<ITreeGrowthStrategy>& strategy, int n, TreeNode* node) {
-    for (int _ = 0; _ < n; ++_)
-        strategy->grow_resources(node);
-}
-
-
 TEST(TreeGrowthStrategiesTest, RBRSimpleTestWorksAtAll) {
     const std::vector<std::string> tree_text_repr = {
             "trunk t",
@@ -21,7 +14,8 @@ TEST(TreeGrowthStrategiesTest, RBRSimpleTestWorksAtAll) {
     };
     auto strategy = std::make_shared<RBRGStrategy>(1);
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
-    repeat_grow_n_times(strategy, 5, root_trunk_node.get());
+    for (int _ = 0; _ < 5; ++_)
+        strategy->grow_resources(root_trunk_node.get());
     ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(1).toInt(), 6);
 }
 
@@ -36,7 +30,8 @@ TEST(TreeGrowthStrategiesTest, RBRNoGrowBeyondCapacity) {
     };
     auto strategy = std::make_shared<RBRGStrategy>(1);
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
-    repeat_grow_n_times(strategy, 50, root_trunk_node.get());
+    for (int _ = 0; _ < 50; ++_)
+        strategy->grow_resources(root_trunk_node.get());
     ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(1).toInt(), 10);
 }
 
@@ -59,7 +54,8 @@ TEST(TreeGrowthStrategiesTest, RBRGrowsOnlyMatchingResourceWhereItIsPresent) {
     };
     auto strategy = std::make_shared<RBRGStrategy>(1);
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
-    repeat_grow_n_times(strategy, 1000, root_trunk_node.get());
+    for (int _ = 0; _ < 1000; ++_)
+        strategy->grow_resources(root_trunk_node.get());
 
     auto are_only_expected_resources_grow = [] (TreeNode* branch, ResourceType expected_resource_type,
                                                 float expected_amount_low, float expected_amount_high) {
@@ -96,13 +92,23 @@ TEST(TreeGrowthStrategiesTest, RGSimpleTestWorksAtAll) {
     };
     auto strategy = std::make_shared<RGStrategy>(1);
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
-    repeat_grow_n_times(strategy, 5, root_trunk_node.get());
+
+    int before_insert_calls = 0;
+    int after_insert_calls = 0;
+    for (int _ = 0; _ < 5; ++_) {
+        strategy->grow_resources(root_trunk_node.get(),
+                [&before_insert_calls](TreeNode*) { ++before_insert_calls; },
+                [&after_insert_calls]() { ++after_insert_calls; });
+    }
+
     const int expected_resource_node_amount = 6;
     ASSERT_EQ(root_trunk_node->child(0)->childCount(), expected_resource_node_amount);
     for (int i = 0; i < expected_resource_node_amount; ++i) {
         auto resource_node = dynamic_cast<ResourceNode*>(root_trunk_node->child(0)->child(i));
         ASSERT_EQ(resource_node->data(1).toInt(), 1);
     }
+    ASSERT_EQ(before_insert_calls, expected_resource_node_amount - 1);
+    ASSERT_EQ(after_insert_calls, expected_resource_node_amount - 1);
 }
 
 
@@ -114,7 +120,8 @@ TEST(TreeGrowthStrategiesTest, RGSimpleTestWorksAtAll2BigIncrements) {
     };
     auto strategy = std::make_shared<RGStrategy>(2);
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
-    repeat_grow_n_times(strategy, 3, root_trunk_node.get());
+    for (int _ = 0; _ < 3; ++_)
+        strategy->grow_resources(root_trunk_node.get(), [](TreeNode*){}, [](){});
     const int expected_resource_node_amount = 3;
     ASSERT_EQ(root_trunk_node->child(0)->childCount(), expected_resource_node_amount);
     for (int i = 1; i < expected_resource_node_amount; ++i) {
@@ -133,7 +140,8 @@ TEST(TreeGrowthStrategiesTest, RGNoGrowthBeyondCapacity) {
     };
     auto strategy = std::make_shared<RGStrategy>(1);
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
-    repeat_grow_n_times(strategy, 100, root_trunk_node.get());
+    for (int _ = 0; _ < 100; ++_)
+        strategy->grow_resources(root_trunk_node.get(), [](TreeNode*){}, [](){});
     ASSERT_EQ(root_trunk_node->child(0)->childCount(), 10);
 }
 

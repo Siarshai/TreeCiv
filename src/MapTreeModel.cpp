@@ -2,10 +2,14 @@
 #include "src/TreeParts/Interfaces/TreeNode.h"
 
 
-MapTreeModel::MapTreeModel(TreeNode* tree_root, std::unique_ptr<ITreeGrowthStrategy> growth_strategy,
+MapTreeModel::MapTreeModel(
+            TreeNode* tree_root,
+            std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy,
+            std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy,
             QObject* parent)
         : QAbstractItemModel(parent)
-        , growth_strategy_(std::move(growth_strategy))
+        , amount_modifying_strategy_(std::move(amount_modifying_strategy))
+        , tree_modifying_strategy_(std::move(tree_modifying_strategy))
         , growth_timer_(new QTimer(this))
         , ticks_divider_(20)
         , current_ticks_(0) {
@@ -110,7 +114,7 @@ void MapTreeModel::update_on_growth_timer() {
     float progress = static_cast<float>(current_ticks_)/static_cast<float>(ticks_divider_);
     emit update_growth_progress_bar(progress);
     if (current_ticks_ == 0) {
-        std::set<TreeNode*> nodes_changed = growth_strategy_->grow_resources(rootItem);
+        std::set<TreeNode*> nodes_changed = amount_modifying_strategy_->grow_resources(rootItem);
         for (auto node : nodes_changed) {
             emit dataChanged(
                     createIndex(node->childNumber(), 0, node),
@@ -118,6 +122,12 @@ void MapTreeModel::update_on_growth_timer() {
                     {LevelRole}
             );
         }
+        tree_modifying_strategy_->grow_resources(rootItem,
+                [this](TreeNode* parent) {
+                    auto index = createIndex(parent->childNumber(), 0, parent);
+                    emit beginInsertRows(index, parent->childCount(), parent->childCount());
+                },
+                [this]() { emit endInsertRows(); } );
     }
 }
 

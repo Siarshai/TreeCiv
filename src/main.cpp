@@ -48,7 +48,8 @@ int main(int argc, char** argv) {
     QQmlApplicationEngine engine;
     MapTreeModel map_model(
             TreeParser().parse_tree(tree_text_repr).finish(),
-            std::make_unique<RBRGStrategy>(1));
+            std::make_unique<RBRGStrategy>(1),
+            std::make_unique<RGStrategy>(1));
     engine.rootContext()->setContextProperty("map_model", &map_model);
     engine.load(QUrl("qrc:/resources/main.qml"));
     return app.exec();

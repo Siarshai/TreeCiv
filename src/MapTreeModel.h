@@ -19,7 +19,10 @@ public:
     };
     Q_ENUM(TreeRoles)
 
-    MapTreeModel(TreeNode* tree_root, std::unique_ptr<ITreeGrowthStrategy> growth_strategy,
+    MapTreeModel(
+            TreeNode* tree_root,
+            std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy,
+            std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy,
             QObject* parent = nullptr);
     ~MapTreeModel() override;
 
@@ -61,7 +64,8 @@ private:
     [[nodiscard]] TreeNode *getItem(const QModelIndex &index) const;
 
     TreeNode *rootItem;
-    const std::unique_ptr<ITreeGrowthStrategy> growth_strategy_;
+    const std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy_;
+    const std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy_;
     QTimer* growth_timer_;
     const int ticks_divider_;
     int current_ticks_;
