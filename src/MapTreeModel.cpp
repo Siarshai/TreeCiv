@@ -110,15 +110,14 @@ void MapTreeModel::update_on_growth_timer() {
     float progress = static_cast<float>(current_ticks_)/static_cast<float>(ticks_divider_);
     emit update_growth_progress_bar(progress);
     if (current_ticks_ == 0) {
-//        beginResetModel();
         std::set<TreeNode*> nodes_changed = growth_strategy_->grow_resources(rootItem);
         for (auto node : nodes_changed) {
             emit dataChanged(
-                    createIndex(0, 0, node->parent()),
-                    createIndex(0, node->parent()->columnCount(), node->parent()),
-                    {LevelRole});
+                    createIndex(node->childNumber(), 0, node),
+                    createIndex(node->childNumber(), node->columnCount(), node),
+                    {LevelRole}
+            );
         }
-//        endResetModel();
     }
 }
 
