@@ -51,7 +51,8 @@ int max_resource_amount_for_node(const BranchNode* branch, const std::set<Resour
 ResourceBreedsResourceGrowthStrategy::ResourceBreedsResourceGrowthStrategy(int resource_per_tick)
         : resource_per_tick_(resource_per_tick) {}
 
-void ResourceBreedsResourceGrowthStrategy::grow_resources(TreeNode* node) const {
+std::set<TreeNode*> ResourceBreedsResourceGrowthStrategy::grow_resources(TreeNode* node) const {
+    std::set<TreeNode*> nodes_changed;
     for (const auto& rt : iterable_resource_types) {
         std::set<BranchNode*> branches;
         gather_eligible_branches(branches, node, rt);
@@ -63,9 +64,11 @@ void ResourceBreedsResourceGrowthStrategy::grow_resources(TreeNode* node) const 
                 // At least one element exists, otherwise that branch wouldn't be eligible
                 auto resource_it = select_random_element(resource_nodes);
                 (*resource_it)->add_resource(resource_amount);
+                nodes_changed.insert(*resource_it);
             }
         }
     }
+    return nodes_changed;
 }
 
 void ResourceBreedsResourceGrowthStrategy::gather_eligible_branches(
@@ -89,7 +92,8 @@ void ResourceBreedsResourceGrowthStrategy::gather_eligible_branches(
 RandomPoppingResourcesGrowthStrategy::RandomPoppingResourcesGrowthStrategy(int resource_per_tick)
         : resource_per_tick_(resource_per_tick) {}
 
-void RandomPoppingResourcesGrowthStrategy::grow_resources(TreeNode* node) const {
+std::set<TreeNode*> RandomPoppingResourcesGrowthStrategy::grow_resources(TreeNode* node) const {
+    std::set<TreeNode*> nodes_changed;
     std::set<BranchNode*> branches;
     gather_branches(branches, node);
     if (!branches.empty()) {
@@ -97,9 +101,12 @@ void RandomPoppingResourcesGrowthStrategy::grow_resources(TreeNode* node) const 
         ResourceType rt = *select_random_element(iterable_resource_types);
         auto resource_nodes = get_resource_nodes(branch);
         int resource_amount = max_resource_amount_for_node(branch, resource_nodes, resource_per_tick_);
-        if (resource_amount > 0)
+        if (resource_amount > 0) {
             branch->addChild(new ResourceNode(branch, rt, resource_amount));
+            nodes_changed.insert(branch);
+        }
     }
+    return nodes_changed;
 }
 
 void RandomPoppingResourcesGrowthStrategy::gather_branches(std::set<BranchNode*>& branches, TreeNode* node) {

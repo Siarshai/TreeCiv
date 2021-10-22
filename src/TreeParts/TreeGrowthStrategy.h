@@ -11,7 +11,7 @@ class ResourceNode;
 class ResourceBreedsResourceGrowthStrategy : public ITreeGrowthStrategy {
 public:
     explicit ResourceBreedsResourceGrowthStrategy(int resource_per_tick);
-    void grow_resources(TreeNode* node) const override;
+    std::set<TreeNode*> grow_resources(TreeNode* node) const override;
 private:
     static void gather_eligible_branches(std::set<BranchNode*>& branches,
                                          TreeNode* node, ResourceType rt);
@@ -22,7 +22,7 @@ private:
 class RandomPoppingResourcesGrowthStrategy : public ITreeGrowthStrategy {
 public:
     explicit RandomPoppingResourcesGrowthStrategy(int resource_per_tick);
-    void grow_resources(TreeNode* node) const override;
+    std::set<TreeNode*> grow_resources(TreeNode* node) const override;
 private:
     static void gather_branches(std::set<BranchNode*>& branches, TreeNode* node);
     int resource_per_tick_;

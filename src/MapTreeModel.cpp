@@ -59,7 +59,7 @@ QModelIndex MapTreeModel::parent(const QModelIndex& index) const {
     TreeNode *childItem = getItem(index);
     TreeNode *parentItem = childItem->parent();
 
-    if (parentItem == rootItem)
+    if (parentItem == nullptr || parentItem == rootItem)
         return QModelIndex();
 
     return createIndex(parentItem->childNumber(), 0, parentItem);
@@ -71,6 +71,7 @@ int MapTreeModel::rowCount(const QModelIndex& parent) const {
 }
 
 int MapTreeModel::columnCount(const QModelIndex& parent) const {
+    // TODO: fixit
     return 2; // rootItem->columnCount();
 }
 
@@ -108,6 +109,17 @@ void MapTreeModel::update_on_growth_timer() {
     current_ticks_ = (current_ticks_ + 1) % ticks_divider_;
     float progress = static_cast<float>(current_ticks_)/static_cast<float>(ticks_divider_);
     emit update_growth_progress_bar(progress);
+    if (current_ticks_ == 0) {
+//        beginResetModel();
+        std::set<TreeNode*> nodes_changed = growth_strategy_->grow_resources(rootItem);
+        for (auto node : nodes_changed) {
+            emit dataChanged(
+                    createIndex(0, 0, node->parent()),
+                    createIndex(0, node->parent()->columnCount(), node->parent()),
+                    {LevelRole});
+        }
+//        endResetModel();
+    }
 }
 
 TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {
