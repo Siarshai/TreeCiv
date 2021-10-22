@@ -1,7 +1,7 @@
 #ifndef TREE_CIVILIZATION_TREEGROWTHSTRATEGY_H
 #define TREE_CIVILIZATION_TREEGROWTHSTRATEGY_H
 
-
+#include <set>
 #include "Interfaces/ITreeGrowthStrategy.h"
 
 

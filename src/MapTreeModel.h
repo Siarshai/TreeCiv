@@ -4,6 +4,7 @@
 
 #include <QTreeView>
 #include <QAbstractItemModel>
+#include <src/TreeParts/Interfaces/ITreeGrowthStrategy.h>
 
 
 class TreeNode;
@@ -18,7 +19,8 @@ public:
     };
     Q_ENUM(TreeRoles)
 
-    explicit MapTreeModel(TreeNode* tree_root, QObject* parent = nullptr);
+    MapTreeModel(TreeNode* tree_root, std::unique_ptr<ITreeGrowthStrategy> growth_strategy,
+            QObject* parent = nullptr);
     ~MapTreeModel() override;
 
     [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
@@ -49,10 +51,20 @@ public:
 
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
+public slots:
+    void update_on_growth_timer();
+
+signals:
+    void update_growth_progress_bar(float progress_amount);
+
 private:
     [[nodiscard]] TreeNode *getItem(const QModelIndex &index) const;
 
     TreeNode *rootItem;
+    const std::unique_ptr<ITreeGrowthStrategy> growth_strategy_;
+    QTimer* growth_timer_;
+    const int ticks_divider_;
+    int current_ticks_;
 };
 
 

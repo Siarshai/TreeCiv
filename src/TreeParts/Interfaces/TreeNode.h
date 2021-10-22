@@ -33,6 +33,7 @@ public:
     [[nodiscard]] virtual QVariant data(int column) const = 0;
 
 protected:
+    // TODO: Use std::reference_wrapper here?
     QList<TreeNode*> childItems_;
     TreeNode* parentItem_;
 };

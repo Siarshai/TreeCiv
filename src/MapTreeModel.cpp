@@ -2,9 +2,16 @@
 #include "src/TreeParts/Interfaces/TreeNode.h"
 
 
-MapTreeModel::MapTreeModel(TreeNode* tree_root, QObject* parent)
-    : QAbstractItemModel(parent) {
+MapTreeModel::MapTreeModel(TreeNode* tree_root, std::unique_ptr<ITreeGrowthStrategy> growth_strategy,
+            QObject* parent)
+        : QAbstractItemModel(parent)
+        , growth_strategy_(std::move(growth_strategy))
+        , growth_timer_(new QTimer(this))
+        , ticks_divider_(20)
+        , current_ticks_(0) {
     rootItem = tree_root;
+    connect(growth_timer_, &QTimer::timeout, this, &MapTreeModel::update_on_growth_timer);
+    growth_timer_->start(1000/ticks_divider_);
 }
 
 MapTreeModel::~MapTreeModel() {
@@ -92,6 +99,12 @@ bool MapTreeModel::insertRows(int position, int rows, const QModelIndex& parent)
 
 bool MapTreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
     return false; // QAbstractItemModel::removeRows(position, rows, parent);
+}
+
+void MapTreeModel::update_on_growth_timer() {
+    current_ticks_ = (current_ticks_ + 1) % ticks_divider_;
+    float progress = static_cast<float>(current_ticks_)/static_cast<float>(ticks_divider_);
+    emit update_growth_progress_bar(progress);
 }
 
 TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {

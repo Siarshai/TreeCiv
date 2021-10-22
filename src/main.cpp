@@ -3,8 +3,12 @@
 #include <QApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
-#include <src/TreeParts/TreeParser.h>
+
 #include "MapTreeModel.h"
+#include "TreeParts/TreeParser.h"
+#include "TreeParts/TreeGrowthStrategy.h"
+
+
 
 const std::vector<std::string> tree_text_repr = {
         "trunk root",
@@ -42,7 +46,9 @@ int main(int argc, char** argv) {
     QCoreApplication::setApplicationName("TreeCivilization");
 
     QQmlApplicationEngine engine;
-    MapTreeModel map_model(TreeParser().parse_tree(tree_text_repr).finish());
+    MapTreeModel map_model(
+            TreeParser().parse_tree(tree_text_repr).finish(),
+            std::make_unique<RBRGStrategy>(1));
     engine.rootContext()->setContextProperty("map_model", &map_model);
     engine.load(QUrl("qrc:/resources/main.qml"));
     return app.exec();

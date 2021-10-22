@@ -86,10 +86,20 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.margins: spacing
             Label {
-                text: "Time to tick"
+                text: "Time to tick: "
             }
-            // TODO: Put loading bar here
+            ProgressBar {
+                id: tick_bar
+                value: 0.0
+            }
             Item { Layout.fillWidth: true }
+        }
+    }
+
+    Connections {
+        target: map_model
+        onUpdate_growth_progress_bar: {
+            tick_bar.value = progress_amount
         }
     }
 }
