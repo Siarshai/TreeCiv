@@ -74,14 +74,9 @@ ApplicationWindow {
                 movable: false
             }
 
-            itemDelegate: Item {
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: styleData.textColor
-                    elide: styleData.elideMode
-                    text: styleData.value
-                }
-            }
+            // QML magic
+            // If you set TreeItemDelegate directly, Qt will whine "Unable to assign ... to QQmlComponent"
+            itemDelegate: Component { TreeItemDelegate{} }
         }
         ListView {
             id: resources_list_view

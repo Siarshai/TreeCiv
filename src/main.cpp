@@ -52,5 +52,6 @@ int main(int argc, char** argv) {
             std::make_unique<RGStrategy>(1));
     engine.rootContext()->setContextProperty("map_model", &map_model);
     engine.load(QUrl("qrc:/resources/main.qml"));
+
     return app.exec();
 }
