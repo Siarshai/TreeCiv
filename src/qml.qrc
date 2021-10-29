@@ -4,5 +4,6 @@
         <file>resources/TreeItemDelegate.qml</file>
         <file>resources/DragSprite.qml</file>
         <file>resources/dragSpriteCreate.js</file>
+        <file>resources/drop_item_icon.png</file>
     </qresource>
 </RCC>

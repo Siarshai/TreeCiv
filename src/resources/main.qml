@@ -78,10 +78,43 @@ ApplicationWindow {
             // If you set TreeItemDelegate directly, Qt will whine "Unable to assign ... to QQmlComponent"
             itemDelegate: Component { TreeItemDelegate{} }
         }
-        ListView {
-            id: resources_list_view
+
+        ColumnLayout {
             Layout.fillHeight: true
             width: base_window.width/3
+
+            Item {
+                id: drag_area_item
+                height: 150
+                width: parent.width
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#500000FF"
+                }
+                Image {
+                    height: 50
+                    width: 50
+                    anchors.centerIn: parent
+                    source: "drop_item_icon.png"
+                    fillMode: Image.PreserveAspectCrop
+                }
+
+                DropArea {
+                    anchors.fill: parent
+                    onEntered: console.log("entered")
+                    onExited: console.log("exited")
+
+                    //onEntered: drag.source.caught = true;
+                    //onExited: drag.source.caught = false;
+                }
+            }
+
+            ListView {
+                id: resources_list_view
+                width: parent.width
+                Layout.fillHeight: true
+            }
         }
     }
 
