@@ -15,7 +15,8 @@ Q_OBJECT
 public:
     enum TreeRoles  {
         DisplayRole = Qt::DisplayRole,
-        LevelRole = Qt::UserRole + 1
+        LevelRole = Qt::UserRole + 1,
+        DisplayedDelegateTypeRole = Qt::UserRole + 2
     };
     Q_ENUM(TreeRoles)
 

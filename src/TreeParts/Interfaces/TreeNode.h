@@ -31,6 +31,7 @@ public:
     [[nodiscard]] virtual bool setData(int column, const QVariant &value);
     [[nodiscard]] virtual int columnCount() const = 0;
     [[nodiscard]] virtual QVariant data(int column) const = 0;
+    [[nodiscard]] virtual QVariant get_delegate_type() const = 0;
 
 protected:
     // TODO: Use std::reference_wrapper here?

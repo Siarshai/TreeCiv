@@ -1,7 +1,9 @@
 <RCC>
     <qresource>
         <file>resources/main.qml</file>
-        <file>resources/TreeItemDelegate.qml</file>
+        <file>resources/TreeGatherableDelegate.qml</file>
+        <file>resources/TreeCarcassDelegate.qml</file>
+        <file>resources/TreeNestDelegate.qml</file>
         <file>resources/DragSprite.qml</file>
         <file>resources/dragSpriteCreate.js</file>
         <file>resources/drop_item_icon.png</file>

@@ -31,6 +31,8 @@ QVariant MapTreeModel::data(const QModelIndex& index, int role) const {
         return item->data(0);
     } else if (role == TreeRoles::LevelRole) {
         return item->data(1);  // TODO: wtf? Why not index.column()
+    } else if (role == TreeRoles::DisplayedDelegateTypeRole) {
+        return item->get_delegate_type();
     }
     return QVariant();
 
@@ -147,5 +149,6 @@ QHash<int, QByteArray> MapTreeModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[DisplayRole] = "display";
     roles[LevelRole] = "level";
+    roles[DisplayedDelegateTypeRole] = "delegate_type";
     return roles;
 }

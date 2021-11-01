@@ -12,6 +12,7 @@ public:
     [[nodiscard]] QVariant data(int column) const override;
     [[nodiscard]] ResourceType get_resource_type() const;
     void add_resource(int increment);
+    [[nodiscard]] QVariant get_delegate_type() const override;
 
 private:
     const ResourceType resourceType_;

@@ -23,3 +23,8 @@ ResourceType ResourceNode::get_resource_type() const {
 void ResourceNode::add_resource(int increment) {
     amount_ += increment;
 }
+
+QVariant ResourceNode::get_delegate_type() const {
+    return "gatherable";
+}
+

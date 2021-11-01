@@ -4,6 +4,7 @@ import QtQuick.Controls 1.5 as OldControls
 import QtQml.Models 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.1
+import Qt.labs.qmlmodels 1.0
 
 
 ApplicationWindow {
@@ -60,23 +61,21 @@ ApplicationWindow {
             model: map_model
 
             OldControls.TableViewColumn {
-                role: "display"
-                title: "Name"
-                width: base_window.width*1/2 - 10
+                role: "delegate_type"
+                title: "Tree"
+                width: base_window.width*2/3 - 10
                 resizable: false
                 movable: false
+                delegate: Component {
+                    Loader {
+                        source: switch(model.delegate_type) {
+                            case "carcass": return "TreeCarcassDelegate.qml"
+                            case "nest": return "TreeNestDelegate.qml"
+                            case "gatherable": return "TreeGatherableDelegate.qml"
+                        }
+                    }
+                }
             }
-            OldControls.TableViewColumn {
-                role: "level"
-                title: "Level"
-                width: base_window.width*1/6 - 10
-                resizable: false
-                movable: false
-            }
-
-            // QML magic
-            // If you set TreeItemDelegate directly, Qt will whine "Unable to assign ... to QQmlComponent"
-            itemDelegate: Component { TreeItemDelegate{} }
         }
 
         ColumnLayout {

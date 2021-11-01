@@ -13,3 +13,8 @@ QVariant TrunkNode::data(int column) const {
         return "Trunk - " + name_;
     return QVariant("");
 }
+
+QVariant TrunkNode::get_delegate_type() const {
+    return "carcass";
+}
+

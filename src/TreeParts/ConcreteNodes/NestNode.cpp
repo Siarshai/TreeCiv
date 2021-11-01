@@ -15,3 +15,7 @@ QVariant NestNode::data(int column) const {
         return QString::number(level_);
     return QVariant("");
 }
+
+QVariant NestNode::get_delegate_type() const {
+    return "nest";
+}

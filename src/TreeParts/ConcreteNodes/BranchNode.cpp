@@ -18,3 +18,7 @@ QVariant BranchNode::data(int column) const {
 int BranchNode::get_capacity() const {
     return capacity_;
 }
+
+QVariant BranchNode::get_delegate_type() const {
+    return "carcass";
+}

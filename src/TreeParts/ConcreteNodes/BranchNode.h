@@ -11,6 +11,7 @@ public:
     [[nodiscard]] int columnCount() const override;
     [[nodiscard]] QVariant data(int column) const override;
     [[nodiscard]] int get_capacity() const;
+    [[nodiscard]] QVariant get_delegate_type() const override;
 
 private:
     QString name_;

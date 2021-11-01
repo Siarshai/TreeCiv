@@ -9,6 +9,7 @@ public:
 
     [[nodiscard]] int columnCount() const override;
     [[nodiscard]] QVariant data(int column) const override;
+    [[nodiscard]] QVariant get_delegate_type() const override;
 
 private:
     QString name_;

@@ -9,7 +9,6 @@
 #include "TreeParts/TreeGrowthStrategy.h"
 
 
-
 const std::vector<std::string> tree_text_repr = {
         "trunk root",
         ">",
