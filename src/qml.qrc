@@ -6,6 +6,8 @@
         <file>resources/TreeNestDelegate.qml</file>
         <file>resources/DragSprite.qml</file>
         <file>resources/dragSpriteCreate.js</file>
-        <file>resources/drop_item_icon.png</file>
+        <file>resources/images/acorn.png</file>
+        <file>resources/images/leaf.png</file>
+        <file>resources/images/move.png</file>
     </qresource>
 </RCC>

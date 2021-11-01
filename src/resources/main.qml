@@ -95,7 +95,7 @@ ApplicationWindow {
                     height: 50
                     width: 50
                     anchors.centerIn: parent
-                    source: "drop_item_icon.png"
+                    source: "images/move.png"
                     fillMode: Image.PreserveAspectCrop
                 }
 
