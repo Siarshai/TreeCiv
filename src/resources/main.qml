@@ -68,10 +68,16 @@ ApplicationWindow {
                 movable: false
                 delegate: Component {
                     Loader {
-                        source: switch(model.delegate_type) {
-                            case "carcass": return "TreeCarcassDelegate.qml"
-                            case "nest": return "TreeNestDelegate.qml"
-                            case "gatherable": return "TreeGatherableDelegate.qml"
+                        source: {
+                            // When tree is collapsing model in dying delegates is null.
+                            // We need not load anything. Returning empty string seems fine (?)
+                            if (!model)
+                                return ""
+                            switch(model.delegate_type) {
+                                case "carcass": return "TreeCarcassDelegate.qml"
+                                case "nest": return "TreeNestDelegate.qml"
+                                case "gatherable": return "TreeGatherableDelegate.qml"
+                            }
                         }
                     }
                 }
