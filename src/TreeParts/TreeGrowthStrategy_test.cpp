@@ -16,7 +16,7 @@ TEST(TreeGrowthStrategiesTest, RBRSimpleTestWorksAtAll) {
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
     for (int _ = 0; _ < 5; ++_)
         strategy->grow_resources(root_trunk_node.get());
-    ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(1).toInt(), 6);
+    ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(DataRoles::ResourceAmountRole).toInt(), 6);
 }
 
 
@@ -32,7 +32,7 @@ TEST(TreeGrowthStrategiesTest, RBRNoGrowBeyondCapacity) {
     std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
     for (int _ = 0; _ < 50; ++_)
         strategy->grow_resources(root_trunk_node.get());
-    ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(1).toInt(), 10);
+    ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(DataRoles::ResourceAmountRole).toInt(), 10);
 }
 
 
@@ -66,8 +66,8 @@ TEST(TreeGrowthStrategiesTest, RBRGrowsOnlyMatchingResourceWhereItIsPresent) {
         ASSERT_NE(leaf_node_2, nullptr);
         ASSERT_EQ(leaf_node_1->get_resource_type(), expected_resource_type);
         ASSERT_EQ(leaf_node_2->get_resource_type(), expected_resource_type);
-        auto r1_amount = leaf_node_1->data(1).toInt();
-        auto r2_amount = leaf_node_2->data(1).toInt();
+        auto r1_amount = leaf_node_1->data(DataRoles::ResourceAmountRole).toInt();
+        auto r2_amount = leaf_node_2->data(DataRoles::ResourceAmountRole).toInt();
         ASSERT_GE(r1_amount + r2_amount, expected_amount_low);
         ASSERT_LE(r1_amount + r2_amount, expected_amount_high);
     };
@@ -105,7 +105,7 @@ TEST(TreeGrowthStrategiesTest, RGSimpleTestWorksAtAll) {
     ASSERT_EQ(root_trunk_node->child(0)->childCount(), expected_resource_node_amount);
     for (int i = 0; i < expected_resource_node_amount; ++i) {
         auto resource_node = dynamic_cast<ResourceNode*>(root_trunk_node->child(0)->child(i));
-        ASSERT_EQ(resource_node->data(1).toInt(), 1);
+        ASSERT_EQ(resource_node->data(DataRoles::ResourceAmountRole).toInt(), 1);
     }
     ASSERT_EQ(before_insert_calls, expected_resource_node_amount - 1);
     ASSERT_EQ(after_insert_calls, expected_resource_node_amount - 1);
@@ -127,7 +127,7 @@ TEST(TreeGrowthStrategiesTest, RGSimpleTestWorksAtAll2BigIncrements) {
     for (int i = 1; i < expected_resource_node_amount; ++i) {
         auto resource_node = dynamic_cast<ResourceNode*>(root_trunk_node->child(0)->child(i));
         ASSERT_NE(resource_node, nullptr);
-        ASSERT_EQ(resource_node->data(1).toInt(), 2);
+        ASSERT_EQ(resource_node->data(DataRoles::ResourceAmountRole).toInt(), 2);
     }
 }
 

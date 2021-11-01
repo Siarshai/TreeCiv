@@ -10,9 +10,7 @@ class NestNode : public TreeNode {
 public:
     NestNode(TreeNode* parent, const QString& name, int level);
 
-    [[nodiscard]] int columnCount() const override;
-    [[nodiscard]] QVariant data(int column) const override;
-    [[nodiscard]] QVariant get_delegate_type() const override;
+    [[nodiscard]] QVariant data(DataRoles role) const override;
 
 private:
     QString name_;

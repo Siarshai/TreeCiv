@@ -8,10 +8,8 @@ class BranchNode : public TreeNode {
 public:
     BranchNode(TreeNode* parent, const QString& name, int capacity);
 
-    [[nodiscard]] int columnCount() const override;
-    [[nodiscard]] QVariant data(int column) const override;
+    [[nodiscard]] QVariant data(DataRoles role) const override;
     [[nodiscard]] int get_capacity() const;
-    [[nodiscard]] QVariant get_delegate_type() const override;
 
 private:
     QString name_;

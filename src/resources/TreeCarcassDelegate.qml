@@ -11,6 +11,6 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         color: styleData.textColor
         elide: styleData.elideMode
-        text: model.display
+        text: model ? model.display : ""
     }
 }

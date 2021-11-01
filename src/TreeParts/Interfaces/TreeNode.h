@@ -15,6 +15,15 @@ const char* get_strrepr(ResourceType rt);
 ResourceType get_typerepr(const char* strrepr);
 
 
+enum class DataRoles  {
+    DisplayRole = Qt::DisplayRole,
+    DelegateTypeRole = Qt::UserRole + 1,
+    LevelRole = Qt::UserRole + 2,
+    ResourceTypeRole = Qt::UserRole + 3,
+    ResourceAmountRole = Qt::UserRole + 4
+};
+
+
 // TODO: Enhance typing with base template class?
 class TreeNode {
 public:
@@ -29,9 +38,7 @@ public:
     void addChild(TreeNode* child);
 
     [[nodiscard]] virtual bool setData(int column, const QVariant &value);
-    [[nodiscard]] virtual int columnCount() const = 0;
-    [[nodiscard]] virtual QVariant data(int column) const = 0;
-    [[nodiscard]] virtual QVariant get_delegate_type() const = 0;
+    [[nodiscard]] virtual QVariant data(DataRoles role) const = 0;
 
 protected:
     // TODO: Use std::reference_wrapper here?

@@ -41,7 +41,7 @@ int max_resource_amount_for_node(const BranchNode* branch, const std::set<Resour
     // we can possibly mix two growing strategies
     int resource_over_children = std::accumulate(
             resource_nodes.cbegin(), resource_nodes.cend(), 0,
-            [](int acc, ResourceNode* rn) { return acc + rn->data(1).toInt(); });
+            [](int acc, ResourceNode* rn) { return acc + rn->data(DataRoles::ResourceAmountRole).toInt(); });
     int capacity_left = branch->get_capacity() - resource_over_children;
     // Possibly can be zero because you can graft leafs beyond max capacity
     return max_resource_per_tick > capacity_left ? std::max(capacity_left, 0) : max_resource_per_tick;

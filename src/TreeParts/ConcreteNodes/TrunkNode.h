@@ -7,9 +7,7 @@ class TrunkNode : public TreeNode {
 public:
     TrunkNode(TreeNode* parent, const QString& name);
 
-    [[nodiscard]] int columnCount() const override;
-    [[nodiscard]] QVariant data(int column) const override;
-    [[nodiscard]] QVariant get_delegate_type() const override;
+    [[nodiscard]] QVariant data(DataRoles role) const override;
 
 private:
     QString name_;

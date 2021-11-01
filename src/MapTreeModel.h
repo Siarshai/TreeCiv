@@ -13,13 +13,6 @@ class TreeNode;
 class MapTreeModel : public QAbstractItemModel {
 Q_OBJECT
 public:
-    enum TreeRoles  {
-        DisplayRole = Qt::DisplayRole,
-        LevelRole = Qt::UserRole + 1,
-        DisplayedDelegateTypeRole = Qt::UserRole + 2
-    };
-    Q_ENUM(TreeRoles)
-
     MapTreeModel(
             TreeNode* tree_root,
             std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy,

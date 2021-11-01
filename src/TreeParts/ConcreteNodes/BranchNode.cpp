@@ -5,20 +5,18 @@
 BranchNode::BranchNode(TreeNode* parent, const QString& name, int capacity)
     : TreeNode(parent), name_(name), capacity_(capacity) {}
 
-int BranchNode::columnCount() const {
-    return 1;
-}
-
-QVariant BranchNode::data(int column) const {
-    if (column == 0)
-        return "Branch - " + name_;
-    return QVariant("");
+QVariant BranchNode::data(DataRoles role) const {
+    switch (role) {
+        case DataRoles::DelegateTypeRole:
+            return "carcass";
+        case DataRoles::DisplayRole:
+            return "Branch - " + name_;
+        default:
+            throw std::logic_error("Requesting from BranchNode incompatible data: "
+                                   + std::to_string(static_cast<int>(role)));
+    }
 }
 
 int BranchNode::get_capacity() const {
     return capacity_;
-}
-
-QVariant BranchNode::get_delegate_type() const {
-    return "carcass";
 }

@@ -11,7 +11,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         color: styleData.textColor
         elide: styleData.elideMode
-        text: model.display + " "  + model.level
+        text: model ? model.display + " "  + model.resource_amount : ""
     }
 
     MouseArea {

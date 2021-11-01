@@ -4,18 +4,16 @@
 NestNode::NestNode(TreeNode* parent, const QString& name, int level)
     : TreeNode(parent), name_(name), level_(level) {}
 
-int NestNode::columnCount() const {
-    return 2;
-}
-
-QVariant NestNode::data(int column) const {
-    if (column == 0)
-        return "Nest - " + name_;
-    else if (column == 1)
-        return QString::number(level_);
-    return QVariant("");
-}
-
-QVariant NestNode::get_delegate_type() const {
-    return "nest";
+QVariant NestNode::data(DataRoles role) const {
+    switch (role) {
+        case DataRoles::DelegateTypeRole:
+            return "nest";
+        case DataRoles::DisplayRole:
+            return "Nest - " + name_;
+        case DataRoles::LevelRole:
+            return level_;
+        default:
+            throw std::logic_error("Requesting from NestNode incompatible data: "
+                                   + std::to_string(static_cast<int>(role)));
+    }
 }

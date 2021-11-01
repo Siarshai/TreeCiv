@@ -27,20 +27,13 @@ QVariant MapTreeModel::data(const QModelIndex& index, int role) const {
         return QVariant();
 
     TreeNode *item = getItem(index);
-    if (role == Qt::DisplayRole) {
-        return item->data(0);
-    } else if (role == TreeRoles::LevelRole) {
-        return item->data(1);  // TODO: wtf? Why not index.column()
-    } else if (role == TreeRoles::DisplayedDelegateTypeRole) {
-        return item->get_delegate_type();
-    }
-    return QVariant();
-
+    assert(item);
+    return item->data(static_cast<DataRoles>(role));
 }
 
 QVariant MapTreeModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return rootItem->data(section);
+        return rootItem->data(DataRoles::DisplayRole);
     return QVariant();
 }
 
@@ -77,8 +70,7 @@ int MapTreeModel::rowCount(const QModelIndex& parent) const {
 }
 
 int MapTreeModel::columnCount(const QModelIndex& parent) const {
-    // TODO: fixit
-    return 2; // rootItem->columnCount();
+    return 1;
 }
 
 Qt::DropActions MapTreeModel::supportedDragActions() const {
@@ -124,8 +116,8 @@ void MapTreeModel::update_on_growth_timer() {
         for (auto node : nodes_changed) {
             emit dataChanged(
                     createIndex(node->childNumber(), 0, node),
-                    createIndex(node->childNumber(), node->columnCount(), node),
-                    {LevelRole}
+                    createIndex(node->childNumber(), 1, node),
+                    {static_cast<int>(DataRoles::LevelRole)}
             );
         }
         tree_modifying_strategy_->grow_resources(rootItem,
@@ -147,8 +139,10 @@ TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {
 
 QHash<int, QByteArray> MapTreeModel::roleNames() const {
     QHash<int, QByteArray> roles;
-    roles[DisplayRole] = "display";
-    roles[LevelRole] = "level";
-    roles[DisplayedDelegateTypeRole] = "delegate_type";
+    roles[static_cast<int>(DataRoles::DisplayRole)] = "display";
+    roles[static_cast<int>(DataRoles::DelegateTypeRole)] = "delegate_type";
+    roles[static_cast<int>(DataRoles::LevelRole)] = "level";
+    roles[static_cast<int>(DataRoles::ResourceTypeRole)] = "resource_type";
+    roles[static_cast<int>(DataRoles::ResourceAmountRole)] = "resource_amount";
     return roles;
 }

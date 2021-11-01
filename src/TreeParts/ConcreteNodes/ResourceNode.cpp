@@ -4,16 +4,20 @@
 ResourceNode::ResourceNode(TreeNode* parent, ResourceType resourceType, int amount)
         : TreeNode(parent), resourceType_(resourceType), amount_(amount) {}
 
-int ResourceNode::columnCount() const {
-    return 2;
-}
-
-QVariant ResourceNode::data(int column) const {
-    if (column == 0)
-        return "Resource - " + QString(get_strrepr(resourceType_));  // TODO: To variable
-    else if (column == 1)
-        return QString::number(amount_);
-    return QVariant("");
+QVariant ResourceNode::data(DataRoles role) const {
+    switch (role) {
+        case DataRoles::DelegateTypeRole:
+            return "gatherable";
+        case DataRoles::DisplayRole:
+            return "Resource - " + QString(get_strrepr(resourceType_));  // TODO: To variable
+        case DataRoles::ResourceTypeRole:
+            return static_cast<int>(resourceType_);
+        case DataRoles::ResourceAmountRole:
+            return amount_;
+        default:
+            throw std::logic_error("Requesting from ResourceNode incompatible data: "
+                                   + std::to_string(static_cast<int>(role)));
+    }
 }
 
 ResourceType ResourceNode::get_resource_type() const {
@@ -23,8 +27,3 @@ ResourceType ResourceNode::get_resource_type() const {
 void ResourceNode::add_resource(int increment) {
     amount_ += increment;
 }
-
-QVariant ResourceNode::get_delegate_type() const {
-    return "gatherable";
-}
-
