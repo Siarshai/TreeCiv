@@ -120,8 +120,8 @@ void MapTreeModel::update_on_growth_timer() {
         for (auto node : nodes_changed) {
             emit dataChanged(
                     createIndex(node->childNumber(), 0, node),
-                    createIndex(node->childNumber(), 1, node),
-                    {static_cast<int>(DataRoles::LevelRole)}
+                    createIndex(node->childNumber(), 0, node),
+                    {static_cast<int>(DataRoles::ResourceAmountRole)}
             );
         }
         tree_modifying_strategy_->grow_resources(rootItem,
