@@ -60,6 +60,8 @@ Item {
             sprite = Sprite.createSprite(mouse.x, mouse.y)
             drag.target = sprite
             sprite.node_id = model.node_id
+            sprite.resource_type = model.resource_type
+            sprite.resource_amount = model.resource_amount
         }
 
         property bool dragActive: drag.active

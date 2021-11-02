@@ -120,7 +120,10 @@ ApplicationWindow {
                     signal nodeTransferred(string uid)
 
                     anchors.fill: parent
-                    onDropped: nodeTransferred(drop.source.node_id)
+                    onDropped: {
+                        map_model.transfer_node(drop.source.node_id)
+                        gathered_resources_model.addResource(drop.source.resource_type, drop.source.resource_amount)
+                    }
                 }
             }
 
@@ -141,11 +144,6 @@ ApplicationWindow {
                 }
             }
         }
-    }
-
-    Connections {
-        target: drop_area
-        onNodeTransferred: map_model.transfer_node(uid)
     }
 
     footer: ToolBar {

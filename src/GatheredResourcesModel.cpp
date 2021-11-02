@@ -27,3 +27,16 @@ QHash<int, QByteArray> GatheredResourcesModel::roleNames() const {
     roles[static_cast<int>(Qt::DisplayRole)] = "display";
     return roles;
 }
+
+void GatheredResourcesModel::addResource(int resource_type, int amount) {
+    auto real_resource_type = static_cast<ResourceType>(resource_type);
+    const int& row = resource_type;
+    if (auto it = resources_.find(real_resource_type); it == resources_.end()) {
+        beginInsertRows(QModelIndex(), row, row);
+        resources_[real_resource_type] = amount;
+        endInsertRows();
+    } else {
+        it->second += amount;
+        dataChanged(index(row, 0), index(row, 0), { Qt::DisplayRole });
+    }
+}

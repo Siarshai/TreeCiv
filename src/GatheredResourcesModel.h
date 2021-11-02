@@ -14,6 +14,8 @@ public:
     [[nodiscard]] int rowCount(const QModelIndex& index = QModelIndex()) const override;
     [[nodiscard]] QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void addResource(int resource_type, int amount);
 private:
     std::map<ResourceType, int> resources_;
 };
