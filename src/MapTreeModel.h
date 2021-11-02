@@ -50,9 +50,10 @@ public:
 
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE void delete_node_by_uid(const QString& uid);
+
 public slots:
     void update_on_growth_timer();
-    void transfer_node(const QVariant& uid);
 
 signals:
     void update_growth_progress_bar(float progress_amount);

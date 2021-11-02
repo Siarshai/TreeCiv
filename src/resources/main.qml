@@ -129,7 +129,7 @@ ApplicationWindow {
 
                     anchors.fill: parent
                     onDropped: {
-                        map_model.transfer_node(drop.source.node_id)
+                        map_model.delete_node_by_uid(drop.source.node_id)
                         gathered_resources_model.addResource(drop.source.resource_type, drop.source.resource_amount)
                     }
                 }
