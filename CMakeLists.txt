@@ -38,6 +38,8 @@ set(MAIN_SOURCES
         src/main.cpp
         src/MapTreeModel.cpp
         src/MapTreeModel.h
+        src/GatheredResourcesModel.cpp
+        src/GatheredResourcesModel.h
         ${TREE_ITEMS})
 qt5_add_resources(QT_RESOURCES src/qml.qrc)
 

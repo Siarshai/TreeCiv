@@ -7,6 +7,7 @@
 #include "MapTreeModel.h"
 #include "TreeParts/TreeParser.h"
 #include "TreeParts/TreeGrowthStrategy.h"
+#include "GatheredResourcesModel.h"
 
 
 const std::vector<std::string> tree_text_repr = {
@@ -45,11 +46,16 @@ int main(int argc, char** argv) {
     QCoreApplication::setApplicationName("TreeCivilization");
 
     QQmlApplicationEngine engine;
+
     MapTreeModel map_model(
             TreeParser().parse_tree(tree_text_repr).finish(),
             std::make_unique<RBRGStrategy>(1),
             std::make_unique<RGStrategy>(1));
     engine.rootContext()->setContextProperty("map_model", &map_model);
+
+    GatheredResourcesModel gathered_resources_model;
+    engine.rootContext()->setContextProperty("gathered_resources_model", &gathered_resources_model);
+
     engine.load(QUrl("qrc:/resources/main.qml"));
 
     return app.exec();

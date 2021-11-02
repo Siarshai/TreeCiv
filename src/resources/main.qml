@@ -128,6 +128,17 @@ ApplicationWindow {
                 id: resources_list_view
                 width: parent.width
                 Layout.fillHeight: true
+                model: gathered_resources_model
+
+                delegate: ItemDelegate {
+                    id: delegate
+
+                    Label {
+                        text: model.display
+                        font.bold: true
+                        Layout.fillWidth: true
+                    }
+                }
             }
         }
     }
