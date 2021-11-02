@@ -117,11 +117,8 @@ ApplicationWindow {
 
                 DropArea {
                     anchors.fill: parent
-                    onEntered: console.log("entered")
+                    onEntered: console.log("entered " + drag.source.node_id)
                     onExited: console.log("exited")
-
-                    //onEntered: drag.source.caught = true;
-                    //onExited: drag.source.caught = false;
                 }
             }
 

@@ -3,6 +3,19 @@
 #include <boost/algorithm/string.hpp>
 
 
+std::string random_uid() {
+    static const std::string charset("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    static const int length = 16;
+
+    std::string result;
+    result.resize(length);
+    for (int i = 0; i < length; i++)
+        result[i] = charset[rand() % charset.length()];
+
+    return result;
+}
+
+
 static constexpr std::array resource_strrepr{"Leaf", "Acorn"};
 static_assert(resource_strrepr.size() == static_cast<int>(ResourceType::COUNT));
 
@@ -20,8 +33,9 @@ ResourceType get_typerepr(const char* strrepr) {
 }
 
 
-TreeNode::TreeNode(TreeNode* parent) : parentItem_(parent) {
-}
+TreeNode::TreeNode(TreeNode* parent)
+    : parentItem_(parent)
+    , uid_(random_uid()) {}
 
 TreeNode::~TreeNode() {
     qDeleteAll(childItems_);
@@ -51,6 +65,20 @@ int TreeNode::childNumber() const {
 
 void TreeNode::addChild(TreeNode* child) {
     childItems_.append(child);
+}
+
+TreeNode* TreeNode::recursive_search_for_node(const std::string& uid) const {
+    for (const auto& child : childItems_) {
+        if (child->uid_ == uid)
+            return child;
+    }
+    TreeNode* result = nullptr;
+    for (const auto& child : childItems_) {
+        result = child->recursive_search_for_node(uid);
+        if (result)
+            break;
+    }
+    return result;
 }
 
 bool TreeNode::setData(int column, const QVariant& value) {

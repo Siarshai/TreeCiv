@@ -3,6 +3,7 @@ import QtQuick 2.12
 
 Item {
     z: 1000
+    property var node_id: null
 
     Drag.active: true
     Drag.hotSpot.x: width / 2

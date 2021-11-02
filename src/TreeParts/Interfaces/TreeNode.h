@@ -21,7 +21,8 @@ enum class DataRoles  {
     DelegateTypeRole = Qt::UserRole + 2,
     LevelRole = Qt::UserRole + 3,
     ResourceTypeRole = Qt::UserRole + 4,
-    ResourceAmountRole = Qt::UserRole + 5
+    ResourceAmountRole = Qt::UserRole + 5,
+    NodeIdRole = Qt::UserRole + 6
 };
 
 
@@ -37,6 +38,7 @@ public:
     [[nodiscard]] int childNumber() const;
 
     void addChild(TreeNode* child);
+    [[nodiscard]] TreeNode* recursive_search_for_node(const std::string& uid) const;
 
     [[nodiscard]] virtual bool setData(int column, const QVariant &value);
     [[nodiscard]] virtual QVariant data(DataRoles role) const = 0;
@@ -45,6 +47,7 @@ protected:
     // TODO: Use std::reference_wrapper here?
     QList<TreeNode*> childItems_;
     TreeNode* parentItem_;
+    const std::string uid_;
 };
 
 

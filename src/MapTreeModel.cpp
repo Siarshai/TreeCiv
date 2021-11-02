@@ -145,5 +145,6 @@ QHash<int, QByteArray> MapTreeModel::roleNames() const {
     roles[static_cast<int>(DataRoles::LevelRole)] = "level";
     roles[static_cast<int>(DataRoles::ResourceTypeRole)] = "resource_type";
     roles[static_cast<int>(DataRoles::ResourceAmountRole)] = "resource_amount";
+    roles[static_cast<int>(DataRoles::NodeIdRole)] = "node_id";
     return roles;
 }

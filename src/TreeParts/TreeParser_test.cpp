@@ -307,4 +307,34 @@ TEST(TreeParserTest, ChainTest1) {
 }
 
 
+TEST(TreeParserTest, SearchForUidTest) {
+    // Not really a TreeParser test, but let's put it here for now:
+    // we don't have much nodes tests for now
+    const std::vector<std::string> tree_text_repr = {
+            "trunk MainTrunk",
+            ">",
+            "trunk SouthwardSubtrunk",
+            ">",
+            "branch GrayleafBranch 12",
+            ">",
+            "resource leaf 1",
+            "nest NestName 2",
+            "resource acorn 3",
+            "<",
+            "branch GrayleafBranch 12",
+            ">",
+            "resource leaf 15",
+    };
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
 
+    TreeNode* subtrunk_node = root_trunk_node->child(0);
+    TreeNode* branch_node = subtrunk_node->child(0);
+    TreeNode* resource_node = branch_node->child(2);  // acorn 3
+    auto variant = resource_node->data(DataRoles::NodeIdRole);
+    ASSERT_FALSE(variant.isNull());
+    auto uid = variant.toString().toStdString();
+    TreeNode* found_node = root_trunk_node->recursive_search_for_node(uid);
+    ASSERT_NE(found_node, nullptr);
+    ASSERT_EQ(found_node->data(DataRoles::ResourceAmountRole), 3);
+    ASSERT_EQ(found_node->data(DataRoles::ResourceTypeRole), static_cast<int>(ResourceType::ACORN));
+}

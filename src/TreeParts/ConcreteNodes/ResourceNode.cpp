@@ -14,6 +14,8 @@ QVariant ResourceNode::data(DataRoles role) const {
             return static_cast<int>(resourceType_);
         case DataRoles::ResourceAmountRole:
             return amount_;
+        case DataRoles::NodeIdRole:
+            return QString::fromStdString(uid_);
         default:
             throw std::logic_error("Requesting from ResourceNode incompatible data: "
                                    + std::to_string(static_cast<int>(role)));

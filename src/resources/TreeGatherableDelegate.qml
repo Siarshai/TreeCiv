@@ -55,6 +55,7 @@ Item {
         onPressed: {
             sprite = Sprite.createSprite(mouse.x, mouse.y)
             drag.target = sprite
+            sprite.node_id = model.node_id
         }
 
         property bool dragActive: drag.active
