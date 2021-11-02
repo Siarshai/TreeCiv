@@ -6,11 +6,29 @@ import "dragSpriteCreate.js" as Sprite
 Item {
     id: delegate_base
 
-    Text {
-        id: delegate_text
+    Row {
         anchors.verticalCenter: parent.verticalCenter
-        color: styleData.textColor
-        elide: styleData.elideMode
-        text: model ? model.display : ""
+        anchors.left: parent.left
+        spacing: 6
+
+        Image {
+            height: 40
+            width: height
+            source: "images/branch.png"
+        }
+
+        SmallVBar {}
+
+        Column {
+            Text {
+                font.bold: true
+                font.pixelSize: 12
+                text: model ? model.display_auxiliary : ""
+            }
+            Text {
+                font.pixelSize: 14
+                text: model ? model.display : ""
+            }
+        }
     }
 }

@@ -76,7 +76,9 @@ TEST(TreeParserTest, Depth2Test) {
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
         QVariant data = subnode->data(DataRoles::DisplayRole);
-        ASSERT_EQ(data.toString().toStdString(), "Trunk - " + children_data[i]);
+        ASSERT_EQ(data.toString().toStdString(), children_data[i]);
+        QVariant auxiliary_data = subnode->data(DataRoles::DisplayAuxiliaryRole);
+        ASSERT_EQ(auxiliary_data.toString().toStdString(), "Trunk");
     }
 }
 
@@ -99,7 +101,9 @@ TEST(TreeParserTest, Depth3Test) {
     for (int i = 0; i < node2->childCount(); ++i) {
         TreeNode* subnode = node2->child(i);
         QVariant data = subnode->data(DataRoles::DisplayRole);
-        ASSERT_EQ(data.toString().toStdString(), "Trunk - " + children_data[i]);
+        ASSERT_EQ(data.toString().toStdString(), children_data[i]);
+        QVariant auxiliary_data = subnode->data(DataRoles::DisplayAuxiliaryRole);
+        ASSERT_EQ(auxiliary_data.toString().toStdString(), "Trunk");
     }
 }
 
@@ -123,9 +127,9 @@ TEST(TreeParserTest, AscendTest) {
         TreeNode* subnode = node->child(i);
         QVariant data = subnode->data(DataRoles::DisplayRole);
         if (i == 0)
-            ASSERT_EQ(data.toString().toStdString(), "Trunk - t11");
+            ASSERT_EQ(data.toString().toStdString(), "t11");
         else
-            ASSERT_EQ(data.toString().toStdString(), "Trunk - " + children_data[i - 1]);
+            ASSERT_EQ(data.toString().toStdString(), children_data[i - 1]);
     }
 }
 
@@ -143,7 +147,9 @@ TEST(TreeParserTest, BranchNodeTest) {
     ASSERT_EQ(node->childCount(), 2);
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
-        ASSERT_EQ(subnode->data(DataRoles::DisplayRole).toString().toStdString(), "Branch - " + children_data[i].first);
+        ASSERT_EQ(subnode->data(DataRoles::DisplayRole).toString().toStdString(), children_data[i].first);
+        QVariant auxiliary_data = subnode->data(DataRoles::DisplayAuxiliaryRole);
+        ASSERT_EQ(auxiliary_data.toString().toStdString(), "Branch");
     }
 }
 
@@ -288,9 +294,9 @@ TEST(TreeParserTest, ChainTest1) {
     TreeNode* branch_node = subtrunk_node->child(0);
     ASSERT_EQ(branch_node->childCount(), 3);
 
-    ASSERT_EQ(branch_node->child(0)->data(DataRoles::DisplayRole).toString().toStdString(), "Resource - Leaf");
-    ASSERT_EQ(branch_node->child(1)->data(DataRoles::DisplayRole).toString().toStdString(), "Nest - NestName");
-    ASSERT_EQ(branch_node->child(2)->data(DataRoles::DisplayRole).toString().toStdString(), "Resource - Acorn");
+    ASSERT_EQ(branch_node->child(0)->data(DataRoles::DisplayRole).toString().toStdString(), "Leaf");
+    ASSERT_EQ(branch_node->child(1)->data(DataRoles::DisplayRole).toString().toStdString(), "NestName");
+    ASSERT_EQ(branch_node->child(2)->data(DataRoles::DisplayRole).toString().toStdString(), "Acorn");
     ASSERT_EQ(branch_node->child(0)->data(DataRoles::ResourceAmountRole).toInt(), 1);
     ASSERT_EQ(branch_node->child(0)->data(DataRoles::ResourceTypeRole).toInt(),
             static_cast<int>(ResourceType::LEAF));

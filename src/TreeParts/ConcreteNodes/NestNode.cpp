@@ -9,7 +9,9 @@ QVariant NestNode::data(DataRoles role) const {
         case DataRoles::DelegateTypeRole:
             return "nest";
         case DataRoles::DisplayRole:
-            return "Nest - " + name_;
+            return name_;
+        case DataRoles::DisplayAuxiliaryRole:
+            return "Squirrels";  // fixed description right now
         case DataRoles::LevelRole:
             return level_;
         default:

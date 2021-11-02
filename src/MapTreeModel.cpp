@@ -140,6 +140,7 @@ TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {
 QHash<int, QByteArray> MapTreeModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[static_cast<int>(DataRoles::DisplayRole)] = "display";
+    roles[static_cast<int>(DataRoles::DisplayAuxiliaryRole)] = "display_auxiliary";
     roles[static_cast<int>(DataRoles::DelegateTypeRole)] = "delegate_type";
     roles[static_cast<int>(DataRoles::LevelRole)] = "level";
     roles[static_cast<int>(DataRoles::ResourceTypeRole)] = "resource_type";

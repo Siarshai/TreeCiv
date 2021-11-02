@@ -10,7 +10,9 @@ QVariant BranchNode::data(DataRoles role) const {
         case DataRoles::DelegateTypeRole:
             return "carcass";
         case DataRoles::DisplayRole:
-            return "Branch - " + name_;
+            return name_;
+        case DataRoles::DisplayAuxiliaryRole:
+            return "Branch";
         default:
             throw std::logic_error("Requesting from BranchNode incompatible data: "
                                    + std::to_string(static_cast<int>(role)));

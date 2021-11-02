@@ -17,10 +17,11 @@ ResourceType get_typerepr(const char* strrepr);
 
 enum class DataRoles  {
     DisplayRole = Qt::DisplayRole,
-    DelegateTypeRole = Qt::UserRole + 1,
-    LevelRole = Qt::UserRole + 2,
-    ResourceTypeRole = Qt::UserRole + 3,
-    ResourceAmountRole = Qt::UserRole + 4
+    DisplayAuxiliaryRole = Qt::UserRole + 1,
+    DelegateTypeRole = Qt::UserRole + 2,
+    LevelRole = Qt::UserRole + 3,
+    ResourceTypeRole = Qt::UserRole + 4,
+    ResourceAmountRole = Qt::UserRole + 5
 };
 
 

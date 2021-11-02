@@ -11,7 +11,7 @@ ApplicationWindow {
     id: base_window
     title: "Tree Civ"
     width: 600
-    height: 600
+    height: 800
     visible: true
 
     // TODO: To separate file
@@ -59,6 +59,16 @@ ApplicationWindow {
             width: base_window.width*2/3
             implicitWidth: base_window.width*2/3
             model: map_model
+
+            selectionMode: OldControls.SelectionMode.NoSelection
+            selection: null
+            // Setting height only to itemDelegate does nothing.
+            // TreeView gets row heights from row delegates (seems not specified in documentation)
+            rowDelegate: Component {
+                Item {
+                    height: 52
+                }
+            }
 
             OldControls.TableViewColumn {
                 role: "delegate_type"

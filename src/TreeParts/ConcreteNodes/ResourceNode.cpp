@@ -1,5 +1,5 @@
 #include "ResourceNode.h"
-#include <cmath>
+
 
 ResourceNode::ResourceNode(TreeNode* parent, ResourceType resourceType, int amount)
         : TreeNode(parent), resourceType_(resourceType), amount_(amount) {}
@@ -9,7 +9,7 @@ QVariant ResourceNode::data(DataRoles role) const {
         case DataRoles::DelegateTypeRole:
             return "gatherable";
         case DataRoles::DisplayRole:
-            return "Resource - " + QString(get_strrepr(resourceType_));  // TODO: To variable
+            return QString(get_strrepr(resourceType_));  // TODO: To variable
         case DataRoles::ResourceTypeRole:
             return static_cast<int>(resourceType_);
         case DataRoles::ResourceAmountRole:

@@ -4,8 +4,11 @@
         <file>resources/TreeGatherableDelegate.qml</file>
         <file>resources/TreeCarcassDelegate.qml</file>
         <file>resources/TreeNestDelegate.qml</file>
+        <file>resources/SmallVBar.qml</file>
         <file>resources/DragSprite.qml</file>
         <file>resources/dragSpriteCreate.js</file>
+        <file>resources/images/nest.png</file>
+        <file>resources/images/branch.png</file>
         <file>resources/images/acorn.png</file>
         <file>resources/images/leaf.png</file>
         <file>resources/images/move.png</file>

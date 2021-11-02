@@ -9,7 +9,9 @@ QVariant TrunkNode::data(DataRoles role) const {
         case DataRoles::DelegateTypeRole:
             return "carcass";
         case DataRoles::DisplayRole:
-            return "Trunk - " + name_;
+            return name_;
+        case DataRoles::DisplayAuxiliaryRole:
+            return "Trunk";
         default:
             throw std::logic_error("Requesting from TrunkNode incompatible data: "
                 + std::to_string(static_cast<int>(role)));
