@@ -52,6 +52,8 @@ ApplicationWindow {
 
     RowLayout {
         anchors.fill: parent
+        spacing: 6
+
         // TODO: Set stretch policy
         OldControls.TreeView {
             id: main_tree_view
@@ -96,12 +98,18 @@ ApplicationWindow {
 
         ColumnLayout {
             Layout.fillHeight: true
+            Layout.rightMargin: 6
             width: base_window.width/3
+            spacing: 6
+
+            Text {
+                text: "Resource drop area:"
+            }
 
             Item {
                 id: drag_area_item
                 height: 150
-                width: parent.width
+                Layout.fillWidth: true
 
                 Rectangle {
                     anchors.fill: parent
@@ -127,21 +135,56 @@ ApplicationWindow {
                 }
             }
 
+            Rectangle {
+                Layout.alignment: Qt.AlignHCenter
+                height: 1
+                width: 24
+                color: "darkgray"
+            }
+
+            Text {
+                text: "Gathered resources:"
+            }
+
             ListView {
                 id: resources_list_view
-                width: parent.width
                 Layout.fillHeight: true
+                Layout.fillWidth: true
                 model: gathered_resources_model
 
                 delegate: ItemDelegate {
                     id: delegate
+                    width: parent.width
 
                     Label {
                         text: model.display
                         font.bold: true
-                        Layout.fillWidth: true
+                        width: parent.width
                     }
                 }
+            }
+
+            Rectangle {
+                Layout.alignment: Qt.AlignHCenter
+                height: 1
+                width: 24
+                color: "darkgray"
+            }
+
+            Button {
+                id: improve_nest_button
+                Layout.fillWidth: true
+                height: 24
+                text: "Improve nest"
+                onClicked: {
+
+                }
+            }
+
+            Text {
+                font.pixelSize: 10
+                color: "darkgray"
+                text: "Requires 3 leafs and 3 acorns"
             }
         }
     }
