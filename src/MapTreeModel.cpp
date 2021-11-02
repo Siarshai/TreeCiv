@@ -1,16 +1,19 @@
 #include <sstream>
+#include <src/TreeParts/ConcreteNodes/NestNode.h>
 #include "MapTreeModel.h"
 #include "src/TreeParts/Interfaces/TreeNode.h"
 
 
 MapTreeModel::MapTreeModel(
-            TreeNode* tree_root,
-            std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy,
-            std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy,
-            QObject* parent)
+        TreeNode* tree_root,
+        std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy,
+        std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy,
+        std::reference_wrapper<IResourceSource> resource_source,
+        QObject* parent)
         : QAbstractItemModel(parent)
         , amount_modifying_strategy_(std::move(amount_modifying_strategy))
         , tree_modifying_strategy_(std::move(tree_modifying_strategy))
+        , resource_source_(resource_source)
         , growth_timer_(new QTimer(this))
         , ticks_divider_(20)
         , current_ticks_(0) {
@@ -140,6 +143,26 @@ void MapTreeModel::delete_node_by_uid(const QString& uid) {
     emit beginRemoveRows(index, row, row);
     parent->removeChild(row);
     emit endRemoveRows();
+}
+
+void MapTreeModel::upgrade_nest_node_request(const QString& uid) {
+    auto result = resource_source_.get().try_consume_resources(ConsumeOperation::NEST_IMPROVEMENT);
+    if (result == ConsumeResult::OK) {
+        TreeNode* node = rootItem->recursive_search_for_node(uid.toStdString());
+        if (!node)
+            throw std::logic_error("MapTreeModel::upgrade_nest_node_request node uid not found");
+        NestNode* nest_node = dynamic_cast<NestNode*>(node);
+        if (!nest_node)
+            throw std::logic_error("MapTreeModel::upgrade_nest_node_request non-nest node found by given uid");
+        nest_node->upgrade_nest();
+        emit dataChanged(
+                createIndex(node->childNumber(), 0, node),
+                createIndex(node->childNumber(), 0, node),
+                {static_cast<int>(DataRoles::LevelRole)}
+        );
+    } else {
+        // Nothing for now
+    }
 }
 
 TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {

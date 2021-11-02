@@ -5,6 +5,7 @@
 #include <QTreeView>
 #include <QAbstractItemModel>
 #include <src/TreeParts/Interfaces/ITreeGrowthStrategy.h>
+#include "Interfaces/IResourceSource.h"
 
 
 class TreeNode;
@@ -17,6 +18,7 @@ public:
             TreeNode* tree_root,
             std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy,
             std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy,
+            std::reference_wrapper<IResourceSource> resource_source,
             QObject* parent = nullptr);
     ~MapTreeModel() override;
 
@@ -51,6 +53,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void delete_node_by_uid(const QString& uid);
+    Q_INVOKABLE void upgrade_nest_node_request(const QString& uid);
 
 public slots:
     void update_on_growth_timer();
@@ -64,6 +67,7 @@ private:
     TreeNode *rootItem;
     const std::unique_ptr<IAmountModifyingGrowthStrategy> amount_modifying_strategy_;
     const std::unique_ptr<ITreeModifyingGrowthStrategy> tree_modifying_strategy_;
+    std::reference_wrapper<IResourceSource> resource_source_;
     QTimer* growth_timer_;
     const int ticks_divider_;
     int current_ticks_;

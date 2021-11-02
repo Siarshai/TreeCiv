@@ -11,6 +11,7 @@ public:
     NestNode(TreeNode* parent, const QString& name, int level);
 
     [[nodiscard]] QVariant data(DataRoles role) const override;
+    void upgrade_nest();
 
 private:
     QString name_;

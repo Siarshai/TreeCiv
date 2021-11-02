@@ -47,14 +47,15 @@ int main(int argc, char** argv) {
 
     QQmlApplicationEngine engine;
 
+    GatheredResourcesModel gathered_resources_model;
+    engine.rootContext()->setContextProperty("gathered_resources_model", &gathered_resources_model);
+
     MapTreeModel map_model(
             TreeParser().parse_tree(tree_text_repr).finish(),
             std::make_unique<RBRGStrategy>(1),
-            std::make_unique<RGStrategy>(1));
+            std::make_unique<RGStrategy>(1),
+            std::ref<IResourceSource>(gathered_resources_model));
     engine.rootContext()->setContextProperty("map_model", &map_model);
-
-    GatheredResourcesModel gathered_resources_model;
-    engine.rootContext()->setContextProperty("gathered_resources_model", &gathered_resources_model);
 
     engine.load(QUrl("qrc:/resources/main.qml"));
 

@@ -14,8 +14,14 @@ QVariant NestNode::data(DataRoles role) const {
             return "Squirrels";  // fixed description right now
         case DataRoles::LevelRole:
             return level_;
+        case DataRoles::NodeIdRole:
+            return QString::fromStdString(uid_);
         default:
             throw std::logic_error("Requesting from NestNode incompatible data: "
                                    + std::to_string(static_cast<int>(role)));
     }
+}
+
+void NestNode::upgrade_nest() {
+    ++level_;
 }
