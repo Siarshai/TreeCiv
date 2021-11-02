@@ -53,6 +53,10 @@ Item {
         property var sprite: null
 
         onPressed: {
+            // Need to create separate draggable widget here (instead of dragging delegate itself)
+            // because we need to drag it outside of TreeView. If we do it naively, delegate will
+            // be drawn at z level DEEPER than TreeView and will be invisible outside TreeView.
+            // Besides, dragged resource image just looks nicer.
             sprite = Sprite.createSprite(mouse.x, mouse.y)
             drag.target = sprite
             sprite.node_id = model.node_id
