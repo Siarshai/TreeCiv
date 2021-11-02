@@ -52,6 +52,7 @@ public:
 
 public slots:
     void update_on_growth_timer();
+    void transfer_node(const QVariant& uid);
 
 signals:
     void update_growth_progress_bar(float progress_amount);

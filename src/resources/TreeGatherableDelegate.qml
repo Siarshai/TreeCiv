@@ -68,6 +68,9 @@ Item {
         onReleased: {
             drag.target = null
             if (sprite) {
+                // Need to call sprite.Drag.drop()
+                // Otherwise DropArea onDropped() won't fire
+                sprite.Drag.drop()
                 sprite.destroy()
                 sprite = null
             }

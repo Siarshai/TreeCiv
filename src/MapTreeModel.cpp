@@ -1,3 +1,4 @@
+#include <sstream>
 #include "MapTreeModel.h"
 #include "src/TreeParts/Interfaces/TreeNode.h"
 
@@ -127,6 +128,25 @@ void MapTreeModel::update_on_growth_timer() {
                 },
                 [this]() { emit endInsertRows(); } );
     }
+}
+
+void MapTreeModel::transfer_node(const QVariant& uid) {
+    if (uid.type() != QVariant::String) {
+        std::stringstream ss;
+        ss << "MapTreeModel::transfer_node expects string, ";
+        ss << QVariant::typeToName(uid.type());
+        ss << " given";
+        throw std::logic_error(ss.str());
+    }
+    TreeNode* node = rootItem->recursive_search_for_node(uid.toString().toStdString());
+    if (!node)
+        throw std::logic_error("MapTreeModel::transfer_node node uid not found");
+    TreeNode* parent = node->parent();
+    int row = node->childNumber();
+    auto index = createIndex(parent->childNumber(), 0, parent);
+    emit beginRemoveRows(index, row, row);
+    parent->removeChild(row);
+    emit endRemoveRows();
 }
 
 TreeNode* MapTreeModel::getItem(const QModelIndex& index) const {

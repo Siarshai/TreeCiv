@@ -36,6 +36,7 @@ public:
     [[nodiscard]] int childCount() const;
     [[nodiscard]] TreeNode* parent() const;
     [[nodiscard]] int childNumber() const;
+    void removeChild(int number);
 
     void addChild(TreeNode* child);
     [[nodiscard]] TreeNode* recursive_search_for_node(const std::string& uid) const;

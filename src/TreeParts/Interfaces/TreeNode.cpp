@@ -63,6 +63,11 @@ int TreeNode::childNumber() const {
     return 0;
 }
 
+void TreeNode::removeChild(int number) {
+    delete childItems_[number];
+    childItems_.removeAt(number);
+}
+
 void TreeNode::addChild(TreeNode* child) {
     childItems_.append(child);
 }

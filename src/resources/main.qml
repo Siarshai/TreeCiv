@@ -116,9 +116,11 @@ ApplicationWindow {
                 }
 
                 DropArea {
+                    id: drop_area
+                    signal nodeTransferred(string uid)
+
                     anchors.fill: parent
-                    onEntered: console.log("entered " + drag.source.node_id)
-                    onExited: console.log("exited")
+                    onDropped: nodeTransferred(drop.source.node_id)
                 }
             }
 
@@ -128,6 +130,11 @@ ApplicationWindow {
                 Layout.fillHeight: true
             }
         }
+    }
+
+    Connections {
+        target: drop_area
+        onNodeTransferred: map_model.transfer_node(uid)
     }
 
     footer: ToolBar {
