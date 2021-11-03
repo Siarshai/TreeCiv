@@ -47,7 +47,10 @@ int main(int argc, char** argv) {
 
     QQmlApplicationEngine engine;
 
-    GatheredResourcesModel gathered_resources_model;
+    GatheredResourcesModel gathered_resources_model({
+                    {ResourceType::LEAF,  3},
+                    {ResourceType::ACORN, 4}
+            });
     engine.rootContext()->setContextProperty("gathered_resources_model", &gathered_resources_model);
 
     MapTreeModel map_model(

@@ -1,9 +1,11 @@
 #include "GatheredResourcesModel.h"
 
-GatheredResourcesModel::GatheredResourcesModel(QObject* parent)
+GatheredResourcesModel::GatheredResourcesModel(
+        const std::map<ResourceType, unsigned int>& initial_resources,
+        QObject* parent)
         : QAbstractListModel(parent) {
-    resources_[ResourceType::LEAF] = 3;
-    resources_[ResourceType::ACORN] = 4;
+    for (const auto& [rt, amount] : initial_resources)
+        addResource(static_cast<int>(rt), amount);
 }
 
 int GatheredResourcesModel::rowCount(const QModelIndex& index) const {
@@ -11,13 +13,9 @@ int GatheredResourcesModel::rowCount(const QModelIndex& index) const {
 }
 
 QVariant GatheredResourcesModel::data(const QModelIndex& index, int role) const {
-    const size_t row = index.row();
-    if (row < resources_.size()) {
-        auto it = resources_.cbegin();
-        std::advance(it, row);
-        const auto& [resource, amount] = *it;
-        std::string resource_strrepr = get_strrepr(resource);
-        return QString::fromStdString(resource_strrepr + " " + std::to_string(amount));
+    if (static_cast<size_t>(index.row()) < resources_.size()) {
+        auto it = resources_.cbegin() + index.row();
+        return QString::fromStdString(get_strrepr(*it));
     }
     return QVariant();
 }
@@ -34,29 +32,21 @@ ConsumeResult GatheredResourcesModel::try_consume_resources(ConsumeOperation op)
         case ConsumeOperation::NEST_IMPROVEMENT: {
             static constexpr int leaf_cost = 3;
             static constexpr int acorn_cost = 3;
-            auto leaf_it = resources_.find(ResourceType::LEAF);
-            auto acorn_it = resources_.find(ResourceType::ACORN);
-            if (leaf_it != resources_.end() && leaf_it->second >= leaf_cost
-                    && acorn_it != resources_.end() && acorn_it->second >= acorn_cost) {
-                std::vector<ResourceType> delete_keys;
-                std::vector<ResourceType> update_keys;
-                auto consume_resource = [&delete_keys, &update_keys] (auto it, int cost) {
-                    if (it->second > cost) {
-                        it->second -= cost;
-                        update_keys.push_back(it->first);
-                    } else {
-                        delete_keys.push_back(it->first);
-                    }
-                };
-                consume_resource(leaf_it, leaf_cost);
-                consume_resource(acorn_it, acorn_cost);
-
-                deleteResourcesAndRows(delete_keys);
-                for (const auto& rt : update_keys) {
-                    const int row = get_row(rt);
-                    dataChanged(index(row, 0), index(row, 0), { Qt::DisplayRole });
+            std::vector<VRTrit> delete_its;
+            for (auto [l, a, it] = std::tuple(0, 0, resources_.rbegin()); it != resources_.rend(); ++it) {
+                if (l < leaf_cost && *it == ResourceType::LEAF) {
+                    ++l;
+                    delete_its.push_back(it);
                 }
-
+                if (a < acorn_cost && *it == ResourceType::ACORN) {
+                    ++a;
+                    delete_its.push_back(it);
+                }
+                if (l == leaf_cost && a == acorn_cost)
+                    break;
+            }
+            if (delete_its.size() == leaf_cost + acorn_cost) {
+                delete_resources_and_rows(delete_its);
                 return ConsumeResult::OK;
             } else {
                 return ConsumeResult::INSUFFICIENT_FUNDS;
@@ -68,30 +58,24 @@ ConsumeResult GatheredResourcesModel::try_consume_resources(ConsumeOperation op)
     }
 }
 
-void GatheredResourcesModel::addResource(int resource_type, int amount) {
-    auto real_resource_type = static_cast<ResourceType>(resource_type);
-    int row = get_row(real_resource_type);
-    if (auto it = resources_.find(real_resource_type); it == resources_.end()) {
-        beginInsertRows(QModelIndex(), row, row);
-        resources_[real_resource_type] = amount;
-        endInsertRows();
-    } else {
-        it->second += amount;
-        dataChanged(index(row, 0), index(row, 0), { Qt::DisplayRole });
-    }
+void GatheredResourcesModel::addResource(int resource_type, unsigned int amount) {
+    if (amount > std::numeric_limits<int>::max())
+        throw std::logic_error("Negative value passed to GatheredResourcesModel::addResource");
+    if (amount == 0)
+        return;  // suspicious though
+    unsigned int row = resources_.size();
+    beginInsertRows(QModelIndex(), row, row + static_cast<unsigned int>(amount - 1));
+    for (unsigned int i = 0; i < amount; ++i)
+        resources_.push_back(static_cast<ResourceType>(resource_type));
+    endInsertRows();
 }
 
-int GatheredResourcesModel::get_row(const ResourceType& real_resource_type) const {
-    auto rt_it = resources_.find(real_resource_type);
-    return std::distance(resources_.begin(), rt_it);
-}
-
-void GatheredResourcesModel::deleteResourcesAndRows(const std::vector<ResourceType>& delete_keys) {
-    for (const auto& rt : delete_keys) {
-        auto it = resources_.find(rt);
-        const int row = std::distance(resources_.begin(), it);
+void GatheredResourcesModel::delete_resources_and_rows(const std::vector<VRTrit>& iterators_sorted_backwards) {
+    for (const auto& rit: iterators_sorted_backwards) {
+        auto fit = rit.base() - 1;
+        int row = std::distance(resources_.begin(), fit);
         emit beginRemoveRows(QModelIndex(), row, row);
-        resources_.erase(it);
+        resources_.erase(fit);
         emit endRemoveRows();
     }
 }
