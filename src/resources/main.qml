@@ -10,8 +10,16 @@ import Qt.labs.qmlmodels 1.0
 ApplicationWindow {
     id: base_window
     title: "Tree"
-    width: 600
+
+    width: 650
     height: 800
+
+    maximumHeight: height
+    maximumWidth: width
+
+    minimumHeight: height
+    minimumWidth: width
+
     visible: true
 
     MessageDialog {
@@ -62,8 +70,8 @@ ApplicationWindow {
         OldControls.TreeView {
             id: main_tree_view
             Layout.fillHeight: true
-            width: base_window.width*2/3
-            implicitWidth: base_window.width*2/3
+            width: base_window.width*3/4
+            implicitWidth: base_window.width*3/4
             model: map_model
 
             selectionMode: OldControls.SelectionMode.NoSelection
@@ -86,7 +94,7 @@ ApplicationWindow {
             OldControls.TableViewColumn {
                 role: "delegate_type"
                 title: "Tree"
-                width: base_window.width*2/3 - 10
+                width: main_tree_view.width - 5
                 resizable: false
                 movable: false
                 delegate: Component {
@@ -110,7 +118,7 @@ ApplicationWindow {
         ColumnLayout {
             Layout.fillHeight: true
             Layout.rightMargin: 6
-            width: base_window.width/3
+            width: base_window.width/4
             spacing: 6
 
             Text {
