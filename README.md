@@ -17,6 +17,9 @@ This is small toy example for Qt5/QML practicing. Multiple useful use-cases of T
 - Press '+' button to upgrade it (it depletes resources)
 - Repeat
 
+ ![pic1](readme_imgs/1.png)
+ ![pic2](readme_imgs/2.png)
+
 ## Used icons
 
 - Branch/Trunk - https://www.flaticon.com/authors/mehwish
