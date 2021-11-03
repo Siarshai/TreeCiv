@@ -14,6 +14,7 @@ public:
 
 private:
     const ResourceType resourceType_;
+    const QString resourceTypeStrrepr_;  // cache
     int amount_;
 };
 

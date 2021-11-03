@@ -44,9 +44,6 @@ QVariant MapTreeModel::headerData(int section, Qt::Orientation orientation, int 
 QModelIndex MapTreeModel::index(int row, int column, const QModelIndex& parent) const {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
-    // TODO: Probably unneeded
-    if (parent.isValid() && parent.column() != 0)  // TODO: && parent.column() != 0 wtf?
-        return QModelIndex();
     TreeNode *parentItem = getItem(parent);
     TreeNode *childItem = parentItem->child(row);
     if (childItem)

@@ -2,14 +2,17 @@
 
 
 ResourceNode::ResourceNode(TreeNode* parent, ResourceType resourceType, int amount)
-        : TreeNode(parent), resourceType_(resourceType), amount_(amount) {}
+        : TreeNode(parent)
+        , resourceType_(resourceType)
+        , resourceTypeStrrepr_(get_strrepr(resourceType_))
+        , amount_(amount) {}
 
 QVariant ResourceNode::data(DataRoles role) const {
     switch (role) {
         case DataRoles::DelegateTypeRole:
             return "gatherable";
         case DataRoles::DisplayRole:
-            return QString(get_strrepr(resourceType_));  // TODO: To variable
+            return resourceTypeStrrepr_;
         case DataRoles::ResourceTypeRole:
             return static_cast<int>(resourceType_);
         case DataRoles::ResourceAmountRole:
