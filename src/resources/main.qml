@@ -9,7 +9,7 @@ import Qt.labs.qmlmodels 1.0
 
 ApplicationWindow {
     id: base_window
-    title: "Tree Civ"
+    title: "Tree"
     width: 600
     height: 800
     visible: true
@@ -22,12 +22,24 @@ ApplicationWindow {
         informativeText: "- Expand tree on the left\n- Drag resources and drop them into drop area on the right\n- Locate nest on the tree\n- Press '+' button to upgrade it (it depletes resources)\n- Repeat"
     }
 
+    MessageDialog {
+        id: aboutResourceGrowthDialog
+        icon: StandardIcon.Information
+        title: "About Resource Growth"
+        text: "How do resources grow?"
+        informativeText: "Each tick (see loading bar below) a random resource appears on the random branch. Then amount of random resource node of each type increased by 1. Branches have certain capacity - tree won't grow beyond certain threshold."
+    }
+
     menuBar: MenuBar {
         Menu {
             title: "&Game"
             MenuItem {
                 text: "About &Game"
                 onTriggered: aboutDialog.open()
+            }
+            MenuItem {
+                text: "About &Resource Growth"
+                onTriggered: aboutResourceGrowthDialog.open()
             }
             MenuItem {
                 text: "E&xit"
