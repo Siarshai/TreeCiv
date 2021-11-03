@@ -8,7 +8,7 @@ using namespace testing;
 
 
 TEST(TreeParserTest, EmptyReturnNullptr) {
-    ASSERT_EQ(TreeParser().finish(), nullptr);
+    ASSERT_EQ(TreeParser().parse_tree({}), nullptr);
 }
 
 
@@ -54,7 +54,7 @@ TEST(TreeParserTest, GoingDeeperTwiceThrows) {
 
 TEST(TreeParserTest, SimpleRootCreate) {
     std::vector<std::string> tree_text_repr = { "trunk t1" };
-    std::unique_ptr<TreeNode> root(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root(TreeParser().parse_tree(tree_text_repr));
     ASSERT_NE(root, nullptr);
     ASSERT_EQ(root->parent(), nullptr);
     ASSERT_EQ(root->childCount(), 0);
@@ -71,7 +71,7 @@ TEST(TreeParserTest, Depth2Test) {
     for (const auto& name : children_data)
         tree_text_repr.push_back("trunk " + name);
 
-    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(node->childCount(), 3);
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
@@ -94,7 +94,7 @@ TEST(TreeParserTest, Depth3Test) {
     for (const auto& name : children_data)
         tree_text_repr.push_back("trunk " + name);
 
-    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(node->childCount(), 1);
     TreeNode* node2 = node->child(0);
     ASSERT_EQ(node2->childCount(), 3);
@@ -121,7 +121,7 @@ TEST(TreeParserTest, AscendTest) {
     for (const auto& name : children_data)
         tree_text_repr.push_back("trunk " + name);
 
-    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(node->childCount(), 4);
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
@@ -143,7 +143,7 @@ TEST(TreeParserTest, BranchNodeTest) {
     for (const auto& p : children_data)
         tree_text_repr.push_back("branch " + p.first + " " + std::to_string(p.second));
 
-    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(node->childCount(), 2);
     for (int i = 0; i < node->childCount(); ++i) {
         TreeNode* subnode = node->child(i);
@@ -202,7 +202,7 @@ TEST(TreeParserTest, HeteroTreesAreAllowed) {
             "branch t12 5",
     };
 
-    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(node->childCount(), 2);
 }
 
@@ -215,7 +215,7 @@ TEST(TreeParserTest, BranchRootIsAllowed) {
             "branch t12 3",
     };
 
-    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(node->childCount(), 2);
 }
 
@@ -287,7 +287,7 @@ TEST(TreeParserTest, ChainTest1) {
             ">",
             "resource leaf 15",
     };
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
     ASSERT_EQ(root_trunk_node->childCount(), 1);
     TreeNode* subtrunk_node = root_trunk_node->child(0);
     ASSERT_EQ(subtrunk_node->childCount(), 2);

@@ -11,9 +11,8 @@ class TreeNode;
 class TreeParser {
 public:
     ~TreeParser();
-    TreeParser& parse_tree(const std::vector<std::string>& tree_text_repr);
-    TreeParser& feed_string(const std::string& node_string);
-    TreeNode* finish();
+    TreeNode* parse_tree(const std::vector<std::string>& tree_text_repr);
+    void feed_string(const std::string& node_string);
 
 private:
     // Could have used here Strategy pattern, but program doesn't seem to benefit from

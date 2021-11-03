@@ -13,7 +13,7 @@ TEST(TreeGrowthStrategiesTest, RBRSimpleTestWorksAtAll) {
             "resource leaf 1"
     };
     auto strategy = std::make_shared<RBRGStrategy>(1);
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
     for (int _ = 0; _ < 5; ++_)
         strategy->grow_resources(root_trunk_node.get());
     ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(DataRoles::ResourceAmountRole).toInt(), 6);
@@ -29,7 +29,7 @@ TEST(TreeGrowthStrategiesTest, RBRNoGrowBeyondCapacity) {
             "resource leaf 1"
     };
     auto strategy = std::make_shared<RBRGStrategy>(1);
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
     for (int _ = 0; _ < 50; ++_)
         strategy->grow_resources(root_trunk_node.get());
     ASSERT_EQ(root_trunk_node->child(0)->child(0)->data(DataRoles::ResourceAmountRole).toInt(), 10);
@@ -53,7 +53,7 @@ TEST(TreeGrowthStrategiesTest, RBRGrowsOnlyMatchingResourceWhereItIsPresent) {
             "branch b3 10",
     };
     auto strategy = std::make_shared<RBRGStrategy>(1);
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
     for (int _ = 0; _ < 1000; ++_)
         strategy->grow_resources(root_trunk_node.get());
 
@@ -91,7 +91,7 @@ TEST(TreeGrowthStrategiesTest, RGSimpleTestWorksAtAll) {
             "resource leaf 1"
     };
     auto strategy = std::make_shared<RGStrategy>(1);
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
 
     int before_insert_calls = 0;
     int after_insert_calls = 0;
@@ -119,7 +119,7 @@ TEST(TreeGrowthStrategiesTest, RGSimpleTestWorksAtAll2BigIncrements) {
             "branch b 10"
     };
     auto strategy = std::make_shared<RGStrategy>(2);
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
     for (int _ = 0; _ < 3; ++_)
         strategy->grow_resources(root_trunk_node.get(), [](TreeNode*){}, [](){});
     const int expected_resource_node_amount = 3;
@@ -139,7 +139,7 @@ TEST(TreeGrowthStrategiesTest, RGNoGrowthBeyondCapacity) {
             "branch b 10",
     };
     auto strategy = std::make_shared<RGStrategy>(1);
-    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr).finish());
+    std::unique_ptr<TreeNode> root_trunk_node(TreeParser().parse_tree(tree_text_repr));
     for (int _ = 0; _ < 100; ++_)
         strategy->grow_resources(root_trunk_node.get(), [](TreeNode*){}, [](){});
     ASSERT_EQ(root_trunk_node->child(0)->childCount(), 10);

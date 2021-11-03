@@ -13,21 +13,25 @@ TreeParser::~TreeParser() {
         delete nodes_.front();
 }
 
-TreeParser& TreeParser::parse_tree(const std::vector<std::string>& tree_text_repr) {
+TreeNode* TreeParser::parse_tree(const std::vector<std::string>& tree_text_repr) {
     for (const auto& s : tree_text_repr)
         feed_string(s);
-    return *this;
+
+    if (nodes_.empty())
+        return nullptr;
+    TreeNode* tmp = nodes_.front();
+    nodes_.clear();
+    return tmp;
 }
 
-TreeParser& TreeParser::feed_string(const std::string& node_string) {
-    // TODO: Refactor?
+void TreeParser::feed_string(const std::string& node_string) {
     ++line_no;
     if (node_string.empty())
-        return *this;  // skip empty lines
+        return;  // skip empty lines
     if (expect_descent_) {
         expect_descent_ = false;
         if (node_string == ">")
-            return *this;  // do not actually do anything, node was already pushed to deque
+            return;  // do not actually do anything, node was already pushed to deque
         throw std::runtime_error(format_exception("Expected \">\" after first node insert", node_string));
     }
     if (nodes_.empty()) {
@@ -58,7 +62,7 @@ TreeParser& TreeParser::feed_string(const std::string& node_string) {
                 nodes_.push_back(child);
                 expect_descent_ = true;
             }
-            return *this;
+            return;
         }
     }
 
@@ -67,21 +71,13 @@ TreeParser& TreeParser::feed_string(const std::string& node_string) {
             throw std::runtime_error(format_exception(
                     "Current node has no children to go down to", node_string));
         nodes_.push_back(nodes_.back()->child(nodes_.back()->childCount() - 1));
-        return *this;
+        return;
     }
     if (node_string == "<") {
         nodes_.pop_back();
-        return *this;
+        return;
     }
     throw std::runtime_error(format_exception("Can not parse", node_string));
-}
-
-TreeNode* TreeParser::finish() {
-    if (nodes_.empty())
-        return nullptr;
-    TreeNode* tmp = nodes_.front();
-    nodes_.clear();
-    return tmp;
 }
 
 TreeNode* TreeParser::maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const {

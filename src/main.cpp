@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     engine.rootContext()->setContextProperty("gathered_resources_model", &gathered_resources_model);
 
     MapTreeModel map_model(
-            TreeParser().parse_tree(tree_text_repr).finish(),
+            TreeParser().parse_tree(tree_text_repr),
             std::make_unique<RBRGStrategy>(1),
             std::make_unique<RGStrategy>(1),
             std::ref<IResourceSource>(gathered_resources_model));
