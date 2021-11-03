@@ -161,29 +161,6 @@ ApplicationWindow {
                     }
                 }
             }
-
-            Rectangle {
-                Layout.alignment: Qt.AlignHCenter
-                height: 1
-                width: 24
-                color: "darkgray"
-            }
-
-            Button {
-                id: improve_nest_button
-                Layout.fillWidth: true
-                height: 24
-                text: "Improve nest"
-                onClicked: {
-
-                }
-            }
-
-            Text {
-                font.pixelSize: 10
-                color: "darkgray"
-                text: "Requires 3 leafs and 3 acorns"
-            }
         }
     }
 
