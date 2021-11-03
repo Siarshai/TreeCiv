@@ -17,6 +17,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Quick REQUIRED)
 
 set(TREE_ITEMS
+        src/TreeParts/Interfaces/ResourceType.cpp
         src/TreeParts/Interfaces/TreeNode.cpp
         src/TreeParts/Interfaces/TreeNode.h
         src/TreeParts/ConcreteNodes/TrunkNode.cpp

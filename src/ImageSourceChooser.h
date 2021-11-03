@@ -2,8 +2,7 @@
 #define TREE_CIVILIZATION_IMAGESOURCECHOOSER_H
 
 #include <QtCore/QObject>
-// TODO: Move ResourceType to separate folder
-#include "TreeParts/Interfaces/TreeNode.h"
+#include "TreeParts/Interfaces/ResourceType.h"
 
 
 class TreeDelegateImageChooser : public QObject {

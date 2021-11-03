@@ -3,8 +3,7 @@
 
 
 #include <QtCore/QAbstractListModel>
-// TODO: Extract ResourceType to separate file
-#include "TreeParts/Interfaces/TreeNode.h"
+#include "TreeParts/Interfaces/ResourceType.h"
 #include "Interfaces/IResourceSource.h"
 
 

@@ -4,15 +4,7 @@
 #include <QList>
 #include <QVariant>
 #include <QVector>
-
-
-enum class ResourceType {
-    LEAF,
-    ACORN,
-    COUNT
-};
-const char* get_strrepr(ResourceType rt);
-ResourceType get_typerepr(const char* strrepr);
+#include "ResourceType.h"
 
 
 enum class DataRoles  {
