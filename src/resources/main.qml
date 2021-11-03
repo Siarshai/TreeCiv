@@ -125,7 +125,7 @@ ApplicationWindow {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: "#500000FF"
+                    color: "lightgray"
                 }
                 Image {
                     height: 50
