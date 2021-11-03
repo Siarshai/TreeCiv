@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME}_test
         src/main_test_all.cpp
         src/TreeParts/TreeParser_test.cpp
         src/TreeParts/TreeGrowthStrategy_test.cpp
+        src/TreeParts/ConcreteNodes/Nodes_test.cpp
         ${TREE_ITEMS})
 
 target_link_libraries(
