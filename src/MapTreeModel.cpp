@@ -84,30 +84,6 @@ Qt::ItemFlags MapTreeModel::flags(const QModelIndex& index) const {
     return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
 }
 
-bool MapTreeModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-    return false; // return QAbstractItemModel::setData(index, value, role);
-}
-
-bool MapTreeModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role) {
-    return false; // return QAbstractItemModel::setHeaderData(section, orientation, value, role);
-}
-
-bool MapTreeModel::insertColumns(int position, int columns, const QModelIndex& parent) {
-    return false; // return QAbstractItemModel::insertColumns(position, columns, parent);
-}
-
-bool MapTreeModel::removeColumns(int position, int columns, const QModelIndex& parent) {
-    return false; // return QAbstractItemModel::removeColumns(position, columns, parent);
-}
-
-bool MapTreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
-    return false; // return QAbstractItemModel::insertRows(position, rows, parent);
-}
-
-bool MapTreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
-    return false; // QAbstractItemModel::removeRows(position, rows, parent);
-}
-
 void MapTreeModel::update_on_growth_timer() {
     current_ticks_ = (current_ticks_ + 1) % ticks_divider_;
     float progress = static_cast<float>(current_ticks_)/static_cast<float>(ticks_divider_);

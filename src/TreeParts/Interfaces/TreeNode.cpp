@@ -66,7 +66,3 @@ TreeNode* TreeNode::recursive_search_for_node(const std::string& uid) const {
     }
     return result;
 }
-
-bool TreeNode::setData(int column, const QVariant& value) {
-    return false;
-}

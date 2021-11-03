@@ -18,7 +18,6 @@ enum class DataRoles  {
 };
 
 
-// TODO: Enhance typing with base template class?
 class TreeNode {
 public:
     explicit TreeNode(TreeNode* parent);
@@ -33,11 +32,9 @@ public:
     void addChild(TreeNode* child);
     [[nodiscard]] TreeNode* recursive_search_for_node(const std::string& uid) const;
 
-    [[nodiscard]] virtual bool setData(int column, const QVariant &value);
     [[nodiscard]] virtual QVariant data(DataRoles role) const = 0;
 
 protected:
-    // TODO: Use std::reference_wrapper here?
     QList<TreeNode*> childItems_;
     TreeNode* parentItem_;
     const std::string uid_;
