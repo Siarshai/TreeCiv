@@ -14,38 +14,24 @@ ApplicationWindow {
     height: 800
     visible: true
 
-    // TODO: To separate file
     MessageDialog {
         id: aboutDialog
         icon: StandardIcon.Information
-        title: "About game"
-        text: "This is text"
-        informativeText: "This is informativeText"
+        title: "About Game"
+        text: "What to do:"
+        informativeText: "- Expand tree on the left\n- Drag resources and drop them into drop area on the right\n- Locate nest on the tree\n- Press '+' button to upgrade it (it depletes resources)\n- Repeat"
     }
 
     menuBar: MenuBar {
         Menu {
             title: "&Game"
             MenuItem {
+                text: "About &Game"
+                onTriggered: aboutDialog.open()
+            }
+            MenuItem {
                 text: "E&xit"
                 onTriggered: Qt.quit()
-            }
-            MenuItem {
-                text: "&Restart"
-            }
-        }
-        Menu {
-            // TODO: Add screens with real rules
-            title: "&Help"
-            MenuItem {
-                text: "Resource system"
-            }
-            MenuItem {
-                text: "How to explore"
-            }
-            MenuItem {
-                text: "About game"
-                onTriggered: aboutDialog.open()
             }
         }
     }
