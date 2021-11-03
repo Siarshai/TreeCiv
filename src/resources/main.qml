@@ -19,7 +19,7 @@ ApplicationWindow {
         icon: StandardIcon.Information
         title: "About Game"
         text: "What to do:"
-        informativeText: "- Expand tree on the left\n- Drag resources and drop them into drop area on the right\n- Locate nest on the tree\n- Press '+' button to upgrade it (it depletes resources)\n- Repeat"
+        informativeText: "- Expand tree on the left (you can double click items for that)\n- Drag resources and drop them into drop area on the right\n- Locate nest on the tree\n- Press '+' button to upgrade it (it depletes resources)\n- Repeat"
     }
 
     MessageDialog {
@@ -75,6 +75,13 @@ ApplicationWindow {
                 Item {
                     height: 52
                 }
+            }
+
+            onDoubleClicked: {
+                if (main_tree_view.isExpanded(index))
+                    main_tree_view.collapse(index)
+                else
+                    main_tree_view.expand(index)
             }
 
             OldControls.TableViewColumn {
