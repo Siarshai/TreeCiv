@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
-set(CMAKE_PREFIX_PATH "/home/siarshai/Programming/Qt5.12.11/5.12.11/gcc_64/lib/cmake")
+
+# If project does not compile because cmake can not find Qt dependencies
+# provive path to QT-compatible cmake in CMAKE_PREFIX_PATH variable
+# (look in /path/to/Qt5.x.y/5.x.y/compiler/lib/cmake)
 
 project("tree_civilization")
 
