@@ -18,10 +18,10 @@ private:
     // Could have used here Strategy pattern, but program doesn't seem to benefit from
     // decoupling here: no dynamically registering Strategies (yet).
     // TODO: Put std::optional here
-    [[nodiscard]] TreeNode* maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const;
-    [[nodiscard]] TreeNode* maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const;
-    [[nodiscard]] TreeNode* maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const;
-    [[nodiscard]] TreeNode* maybe_create_nest_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] std::optional<TreeNode*> maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] std::optional<TreeNode*> maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] std::optional<TreeNode*> maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const;
+    [[nodiscard]] std::optional<TreeNode*> maybe_create_nest_node(TreeNode* parent, const std::string& node_string) const;
     std::string format_exception(const char* message, const std::string& node_string) const;
 
     std::deque<TreeNode*> nodes_;

@@ -57,9 +57,9 @@ void TreeParser::feed_string(const std::string& node_string) {
     for (const auto& fn : node_creator_fn) {
         if (auto child = std::invoke(fn, this, parent, node_string)) {
             if (parent) {
-                parent->addChild(child);
+                parent->addChild(*child);
             } else {
-                nodes_.push_back(child);
+                nodes_.push_back(*child);
                 expect_descent_ = true;
             }
             return;
@@ -80,7 +80,7 @@ void TreeParser::feed_string(const std::string& node_string) {
     throw std::runtime_error(format_exception("Can not parse", node_string));
 }
 
-TreeNode* TreeParser::maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const {
+std::optional<TreeNode*> TreeParser::maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const {
     static const std::regex trunk_regex_("trunk ([a-zA-Z0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, trunk_regex_)) {
@@ -89,10 +89,10 @@ TreeNode* TreeParser::maybe_create_trunk_node(TreeNode* parent, const std::strin
         std::string name = matches[1].str();
         return new TrunkNode(parent, QString::fromStdString(name));
     }
-    return nullptr;
+    return std::nullopt;
 }
 
-TreeNode* TreeParser::maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const {
+std::optional<TreeNode*> TreeParser::maybe_create_branch_node(TreeNode* parent, const std::string& node_string) const {
     static const std::regex branch_regex_("branch ([a-zA-Z0-9]+) ([0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, branch_regex_)) {
@@ -100,10 +100,10 @@ TreeNode* TreeParser::maybe_create_branch_node(TreeNode* parent, const std::stri
         int capacity = atoi(matches[2].str().c_str());
         return new BranchNode(parent, QString::fromStdString(name), capacity);
     }
-    return nullptr;
+    return std::nullopt;
 }
 
-TreeNode* TreeParser::maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const {
+std::optional<TreeNode*> TreeParser::maybe_create_resource_node(TreeNode* parent, const std::string& node_string) const {
     static const std::regex branch_regex_("resource (leaf|acorn) ([0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, branch_regex_)) {
@@ -114,10 +114,10 @@ TreeNode* TreeParser::maybe_create_resource_node(TreeNode* parent, const std::st
         unsigned int amount = atoi(matches[2].str().c_str());
         return new ResourceNode(parent, rt, amount);
     }
-    return nullptr;
+    return std::nullopt;
 }
 
-TreeNode* TreeParser::maybe_create_nest_node(TreeNode* parent, const std::string& node_string) const {
+std::optional<TreeNode*> TreeParser::maybe_create_nest_node(TreeNode* parent, const std::string& node_string) const {
     static const std::regex branch_regex_("nest ([a-zA-Z0-9]+) ([0-9]+)");
     std::smatch matches;
     if (std::regex_match(node_string, matches, branch_regex_)) {
@@ -127,7 +127,7 @@ TreeNode* TreeParser::maybe_create_nest_node(TreeNode* parent, const std::string
         int level = atoi(matches[2].str().c_str());
         return new NestNode(parent, QString::fromStdString(name), level);
     }
-    return nullptr;
+    return std::nullopt;
 }
 
 std::string TreeParser::format_exception(const char* message, const std::string& node_string) const {
