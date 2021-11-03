@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_PREFIX_PATH "/home/siarshai/Programming/Qt5.12.11/5.12.11/gcc_64/lib/cmake")
 
-set(PROJECT_NAME tree_civilization)  # TODO: redundant
-project(${PROJECT_NAME})
+project("tree_civilization")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} -Wall -Werror -std=c++11 -fstrict-aliasing -pedantic-errors -pedantic -Wno-deprecated-declarations -Wno-unused-variable")
@@ -40,6 +39,7 @@ set(MAIN_SOURCES
         src/MapTreeModel.h
         src/GatheredResourcesModel.cpp
         src/GatheredResourcesModel.h
+        src/ImageSourceChooser.h
         ${TREE_ITEMS})
 qt5_add_resources(QT_RESOURCES src/qml.qrc)
 

@@ -14,8 +14,7 @@ Item {
         Image {
             height: 40
             width: height
-            // TODO: To QENUM
-            source: model.resource_type == 0 ? "images/leaf.png" : "images/acorn.png"
+            source: image_chooser.getImageForResourceType(model.resource_type)
         }
 
         SmallVBar {}
@@ -62,13 +61,6 @@ Item {
             sprite.node_id = model.node_id
             sprite.resource_type = model.resource_type
             sprite.resource_amount = model.resource_amount
-        }
-
-        property bool dragActive: drag.active
-        onDragActiveChanged: {
-            if (drag.active) {
-                // TODO: Make sprite visible? See what looks better
-            }
         }
 
         onReleased: {

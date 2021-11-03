@@ -8,6 +8,7 @@
 #include "TreeParts/TreeParser.h"
 #include "TreeParts/TreeGrowthStrategy.h"
 #include "GatheredResourcesModel.h"
+#include "ImageSourceChooser.h"
 
 
 const std::vector<std::string> tree_text_repr = {
@@ -39,6 +40,7 @@ const std::vector<std::string> tree_text_repr = {
         "resource leaf 2",
 };
 
+
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     QCoreApplication::setOrganizationName("Stub");
@@ -46,6 +48,9 @@ int main(int argc, char** argv) {
     QCoreApplication::setApplicationName("TreeCivilization");
 
     QQmlApplicationEngine engine;
+
+    TreeDelegateImageChooser image_chooser;
+    engine.rootContext()->setContextProperty("image_chooser", &image_chooser);
 
     GatheredResourcesModel gathered_resources_model({
                     {ResourceType::LEAF,  3},

@@ -59,7 +59,6 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 6
 
-        // TODO: Set stretch policy
         OldControls.TreeView {
             id: main_tree_view
             Layout.fillHeight: true

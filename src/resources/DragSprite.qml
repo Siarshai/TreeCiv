@@ -14,6 +14,6 @@ Item {
     Image {
         height: parent.height
         width: parent.width
-        source: model.resource_type == 0 ? "images/leaf.png" : "images/acorn.png"
+        source: image_chooser.getImageForResourceType(model.resource_type)
     }
 }
