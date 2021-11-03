@@ -26,12 +26,27 @@ TreeNode* TreeParser::parse_tree(const std::vector<std::string>& tree_text_repr)
 
 void TreeParser::feed_string(const std::string& node_string) {
     ++line_no;
-    if (node_string.empty())
-        return;  // skip empty lines
+    static const std::array maybe_process_fns = {
+            &TreeParser::skip_empty_line,
+            &TreeParser::maybe_process_up_and_down_on_semiempty_tree,
+            &TreeParser::maybe_process_node_creation,
+            &TreeParser::maybe_process_up_and_down_general
+    };
+    for (const auto& maybe_process_fn : maybe_process_fns)
+        if (std::invoke(maybe_process_fn, this, node_string))
+            return;
+    throw std::runtime_error(format_exception("Can not parse", node_string));
+}
+
+[[nodiscard]] bool TreeParser::skip_empty_line(const std::string& node_string) {
+    return node_string.empty();
+}
+
+[[nodiscard]] bool TreeParser::maybe_process_up_and_down_on_semiempty_tree(const std::string& node_string) {
     if (expect_descent_) {
         expect_descent_ = false;
         if (node_string == ">")
-            return;  // do not actually do anything, node was already pushed to deque
+            return true;  // do not actually do anything, node was already pushed to deque
         throw std::runtime_error(format_exception("Expected \">\" after first node insert", node_string));
     }
     if (nodes_.empty()) {
@@ -46,9 +61,12 @@ void TreeParser::feed_string(const std::string& node_string) {
             throw std::runtime_error(format_exception(
                     "Can not go up on root node; did you mean finish()?", node_string));
     }
-    TreeNode* parent = nodes_.empty() ? nullptr : nodes_.back();
+    return false;
+}
 
-    static const auto node_creator_fn = {
+bool TreeParser::maybe_process_node_creation(const std::string& node_string) {
+    TreeNode* parent = nodes_.empty() ? nullptr : nodes_.back();
+    static const std::array node_creator_fn = {
             &TreeParser::maybe_create_trunk_node,
             &TreeParser::maybe_create_branch_node,
             &TreeParser::maybe_create_resource_node,
@@ -62,22 +80,25 @@ void TreeParser::feed_string(const std::string& node_string) {
                 nodes_.push_back(*child);
                 expect_descent_ = true;
             }
-            return;
+            return true;
         }
     }
+    return false;
+}
 
+[[nodiscard]] bool TreeParser::maybe_process_up_and_down_general(const std::string& node_string) {
     if (node_string == ">") {
         if (!nodes_.back()->childCount())
             throw std::runtime_error(format_exception(
                     "Current node has no children to go down to", node_string));
         nodes_.push_back(nodes_.back()->child(nodes_.back()->childCount() - 1));
-        return;
+        return true;
     }
     if (node_string == "<") {
         nodes_.pop_back();
-        return;
+        return true;
     }
-    throw std::runtime_error(format_exception("Can not parse", node_string));
+    return false;
 }
 
 std::optional<TreeNode*> TreeParser::maybe_create_trunk_node(TreeNode* parent, const std::string& node_string) const {
