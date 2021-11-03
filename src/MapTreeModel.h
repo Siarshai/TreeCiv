@@ -60,6 +60,7 @@ public slots:
 
 signals:
     void update_growth_progress_bar(float progress_amount);
+    void show_insufficient_funds_message();
 
 private:
     [[nodiscard]] TreeNode *getItem(const QModelIndex &index) const;

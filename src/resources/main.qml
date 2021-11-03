@@ -30,6 +30,13 @@ ApplicationWindow {
         informativeText: "Each tick (see loading bar below) a random resource appears on the random branch. Then amount of random resource node of each type increased by 1. Branches have certain capacity - tree won't grow beyond certain threshold."
     }
 
+    MessageDialog {
+        id: insufficientFundsNotification
+        icon: StandardIcon.Information
+        title: "Insufficient funds"
+        text: "Nest upgrade requires 3 leafs and 3 acorns"
+    }
+
     menuBar: MenuBar {
         Menu {
             title: "&Game"
@@ -183,6 +190,9 @@ ApplicationWindow {
         target: map_model
         onUpdate_growth_progress_bar: {
             tick_bar.value = progress_amount
+        }
+        onShow_insufficient_funds_message: {
+            insufficientFundsNotification.open()
         }
     }
 }

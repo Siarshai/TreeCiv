@@ -161,7 +161,7 @@ void MapTreeModel::upgrade_nest_node_request(const QString& uid) {
                 {static_cast<int>(DataRoles::LevelRole)}
         );
     } else {
-        // Nothing for now
+        emit show_insufficient_funds_message();
     }
 }
 
